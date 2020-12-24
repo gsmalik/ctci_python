@@ -219,6 +219,7 @@ def heap_sort(array):
 
     return array
 
+
 def insertion_sort(array):
     """
     T = O(n^2). If we have a descending array, then element at index 1
@@ -228,11 +229,58 @@ def insertion_sort(array):
 
     S = O(1). Only a temp variable used for swaps.
     """
-    for index in range(len(array)-1):
-        if array[index] > array[index+1]:
+    for index in range(len(array) - 1):
+        if array[index] > array[index + 1]:
             # move index + 1 to proper index
             pin_index = index + 1
-            while pin_index > 0 and array[pin_index] < array[pin_index-1]:
-                array[pin_index], array[pin_index-1] = array[pin_index-1], array[pin_index]
+            while pin_index > 0 and array[pin_index] < array[pin_index - 1]:
+                array[pin_index], array[pin_index - 1] = (
+                    array[pin_index - 1],
+                    array[pin_index],
+                )
                 pin_index -= 1
     return array
+
+
+def bucket_sort(array, num_buckets, low, high):
+    """
+    T = O(n) in best. O(k*sorting_elements(n/k)) in average case.
+    O(sorting algorithm) in worst case. It takes n steps to assign each
+    element to bucket. In average case, since elements are uniformly
+    distributed, each bucket should have n/k elements. Hence it should
+    take O(k*sorting_elements(n/k)) time on average. In best case,
+    each bucket will only have one element, thus no sorting required,
+    leading to O(n) best case time.
+
+    S = At one time, you will only be sorting one bucket and then just
+    storing the final sorted bucket. Sorted buckets total will have a
+    total of n elements obviosuly so we need O(n) space to store sorted
+    buckets. Coming back to sorting a bucket, once a bucket is sorted
+    we can destroy the intermediate space. So, in worst case, all elements
+    can belong to same bucket. Thus space complexity will be
+    O(n)+space_complexity(sorting_algorithm(n)). In average case, each bucket
+    will have n/k elements and we will only sort one bucket at a time. Thus
+    space complexity will be O(n)+space_complexity(sorting_algorithm(n/k)). In
+    best case, there will be 1 element in each case, thus requiring no sorting
+    and consuming only O(n) space.
+    """
+    # Create number of buckets
+    bucket = []
+    for _ in range(num_buckets):
+        bucket.append([])
+
+    # Nomalize value and assign it to a bucket
+    for value in array:
+        assert ((value - low) / (high - low)) * num_buckets >= 0
+        bucket[int(((value - low) / (high - low)) * num_buckets)].append(value)
+
+    # Sort each bucket individually using merge sort
+    for index, value in enumerate(bucket):
+        bucket[index] = merge_sort(value)
+
+    # Return sorted buckets
+    return np.array([item for sublist in bucket for item in sublist])
+
+
+test = np.random.randint(50, 100, (10))
+print(bucket_sort(test, 5, 50, 100))
