@@ -157,3 +157,64 @@ def radix_sort(array):
         base *= 10
         index += 1
     return array
+
+
+def heap_sort(array):
+    """
+    T = O(nlogn) = O(log(n!)). Creating the first heap of entire array takes O(n)
+    time (weird derivation. See https://www.youtube.com/watch?v=k72DtCnY4MU). Then
+    each time you have to heapify the top element (after swap), that will take log(n-1)
+    for first, then log(n-2) for second and so on. Adding all this, it becomes O(log(n!))
+    which can be written as O(nlogn) loosely. Not super sure why everyone says time
+    complexity is nlogn whereas it should be log(n!).
+
+    S = O(1). Just using a temp variable to do swaps. Everything is in-place.
+    """
+
+    def heapify_complete_array(array):
+        # Hepaify upper half of elements of array. Upper half enough because
+        # we will swap with children (2*index+1, 2*index+2) inside this, which
+        # lie in lower half.
+        for index in range(len(array) // 2, -1, -1):
+            array = heapify(array, index)
+        return array
+
+    def heapify(array, node_index):
+
+        orig_index = node_index
+        left_child_index = 2 * node_index + 1
+        right_child_index = 2 * node_index + 2
+
+        # Decide which node to swap with. Will swap with bigger child, if exists.
+        if (
+            left_child_index < len(array)
+            and array[left_child_index] > array[node_index]
+        ):
+            node_index = left_child_index
+
+        if (
+            right_child_index < len(array)
+            and array[right_child_index] > array[node_index]
+        ):
+            node_index = right_child_index
+
+        # Do the swap. Heapify the current element. Note the current element is the
+        # orgiginal element. It has just been moved and we are calling heapify on its
+        # latest position
+        if node_index != orig_index:
+            array[orig_index], array[node_index] = array[node_index], array[orig_index]
+            array = heapify(array, node_index)
+        return array
+
+    len_array = len(array)
+
+    # Heapigy entire array once
+    array = heapify_complete_array(array)
+    for index in range(len_array - 1, -1, -1):
+        # Swap first (max) and last element (of array size index+1).
+        array[0], array[index] = array[index], array[0]
+
+        # Heapify remaining array to find next max element
+        array[:index] = heapify(array[:index], 0)
+
+    return array
