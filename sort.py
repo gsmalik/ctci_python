@@ -65,6 +65,15 @@ def quick_sort(array):
     is of size n-1, then n-2 etc. Best happens when actual position
     of pivot is in the middle of array. Hence, next sort is of size
     n/2, then n/4 and so on.
+
+    S = O(n) in worst case and O(logn) in best case. Remeber that
+    each recursive call adds 1 pointer to the stack. In worst case,
+    we would end up making n recursive calls, with each call using 
+    up O(1) space, which gets destroyed after that call is finished.
+    Hence, at the last recursive call, we would have n calls on the stack
+    and 1 temp variable to swap. Thus, in worst case, we would consume
+    O(n) space. In best case, we would have O(logn) calls, thus consuming
+    O(logn) space.
     """
 
     def identifySplit_movePivot(array, pivot_index):
@@ -100,9 +109,14 @@ def merge_sort(array):
     n/l. There are a total of logn levels
 
     S = O(n). At every level, you need to create a new array to merge the 2
-    sub-arrays. Once merged, the sub-arrays are destroyed. You create l temporary
-    arrays, each of size n/l at level l. All levels below it are destroyed.
-    Hence, you only use additional space of O(n).
+    sub-arrays. Once merged, the sub-arrays are destroyed. When merging 2 sub-arrays
+    at level l, you will need a new temp array of size n/2^l. At level 0, this means
+    you will need a temp array of size n. Also, dont forget to think about your stack
+    depth, although you will see that it is smaller than n. In merge sort, you will have
+    a max recursive stack depth of O(logn) at level logn. But at this stage, your temp array
+    size will be 0 since this is last level. At level log(n)-1, your temp array size will be
+    2 and recursive depth of log(n)-1. Thus, at level 0, your temp array will be of size n
+    and recursive depth of 0. Thus, overall space complexity is O(n).
     """
 
     # Return as-is if len is 1
