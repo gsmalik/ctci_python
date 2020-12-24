@@ -218,3 +218,21 @@ def heap_sort(array):
         array[:index] = heapify(array[:index], 0)
 
     return array
+
+def insertion_sort(array):
+    """
+    T = O(n^2). If we have a descending array, then element at index 1
+    will be swapped with 0. Then index at 2 will swap with 1 and then 0.
+    Index 3 with 2,1 and 0 and so on. So, worst case, it can take n^2
+    swaps.
+
+    S = O(1). Only a temp variable used for swaps.
+    """
+    for index in range(len(array)-1):
+        if array[index] > array[index+1]:
+            # move index + 1 to proper index
+            pin_index = index + 1
+            while pin_index > 0 and array[pin_index] < array[pin_index-1]:
+                array[pin_index], array[pin_index-1] = array[pin_index-1], array[pin_index]
+                pin_index -= 1
+    return array
