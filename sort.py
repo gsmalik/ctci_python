@@ -280,7 +280,3 @@ def bucket_sort(array, num_buckets, low, high):
 
     # Return sorted buckets
     return np.array([item for sublist in bucket for item in sublist])
-
-
-test = np.random.randint(50, 100, (10))
-print(bucket_sort(test, 5, 50, 100))
