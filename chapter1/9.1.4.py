@@ -9,7 +9,7 @@ def palindrome_permutation(string):
 
     Returns
     -------
-    True if string is permuation. False otherwise.
+    True if string is permutation. False otherwise.
 
     Time Complexity
     ---------------
