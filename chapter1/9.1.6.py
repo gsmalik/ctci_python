@@ -67,7 +67,7 @@ def compress_string(string):
             count += 1
         print(index, character, count)
 
-    # Compress remaining character is ending characaters of the string were all
+    # Compress remaining character is ending characters of the string were all
     # the same. For example, 'eee', 'ff'. We won't do this if last character in
     # the string was a new character. For example, 'ef', 'cd' etc.
     if character == last_character:

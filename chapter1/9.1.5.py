@@ -54,5 +54,5 @@ def check_within_one_edit(string1, string2):
 print(check_within_one_edit("pale", "ple"))
 print(check_within_one_edit("pale", "plee"))
 print(check_within_one_edit("pales", "pale"))
-print(check_within_one_edit("pale", "bale"))
+print(check_within_one_edit("pale", "able"))
 print(check_within_one_edit("pale", "bake"))

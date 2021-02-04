@@ -15,7 +15,7 @@ def is_permutation(string1, string2):
 
     Returns
     -------
-    True if strings are permuations. False otherwise.
+    True if strings are permutations. False otherwise.
 
     Time Complexity
     ---------------
