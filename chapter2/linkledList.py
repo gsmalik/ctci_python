@@ -18,7 +18,7 @@ def create_linked_list(array, forward=True):
         Array whose elements will be connected via a linked list.
 
     forward: ``bool``
-        Wether to connect to next or previous. Defaults to True.
+        Whether to connect to next or previous. Defaults to True.
 
     Returns
     -------
@@ -55,7 +55,7 @@ def attach_node(src_node, to_attach_node, forward=True):
         Node to be attached.
 
     forward: ``bool``
-        Wether to connect to next or previous. Defaults to True.
+        Whether to connect to next or previous. Defaults to True.
 
     Time Complexity
     ---------------
@@ -82,7 +82,7 @@ def traverse_linked_list(head, forward=True):
         Head node of linked list.
 
     forward: ``bool``
-        Wether to connect to next or previous. Defaults to True.
+        Whether to connect to next or previous. Defaults to True.
 
     Time Complexity
     ---------------
