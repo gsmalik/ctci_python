@@ -1,12 +1,10 @@
 import numpy as np
 import linkledList as ll
-# np.random.seed(0)
 
 
-test = np.random.randint(0,10,15)
-myLinkedList = ll.linkedList()
-myLinkedList.createLinkedList(test)
-myLinkedList.traverseLinkedList()
-myLinkedList.removeDuplicates()
-myLinkedList.traverseLinkedList()
-
+test = np.random.randint(0, 5, 10)
+print(test)
+head = ll.create_linked_list(test)
+ll.traverse_linked_list(head)
+ll.remove_duplicates(head)
+ll.traverse_linked_list(head)
