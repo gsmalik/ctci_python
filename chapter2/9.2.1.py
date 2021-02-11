@@ -1,5 +1,5 @@
 import numpy as np
-import linkledList as ll
+import linkled_list as ll
 
 
 test = np.random.randint(0, 5, 10)

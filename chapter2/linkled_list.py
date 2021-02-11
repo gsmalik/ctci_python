@@ -71,7 +71,6 @@ def attach_node(src_node, to_attach_node, forward=True):
         src_node.previous = to_attach_node
 
 
-# aaaaa write this, creation and deletion in cheat sheet
 def traverse_linked_list(head, forward=True):
     """
     Function to print values of each node of linked list.
@@ -105,34 +104,27 @@ def traverse_linked_list(head, forward=True):
 
 
 def remove_duplicates(head):
-    """
-    Function to remove nodes with duplicate values in a linked list.
-
-    Parameters
-    ----------
-    head: ``Node``
-        Head node of linked list.
-
-    Time Complexity
-    ---------------
-    O(N)
-
-    Space Complexity
-    ----------------
-    O(N)
-    """
+    # Create a set to store seen values
     seen = set([])
+    # Flag to store whether end of linked list is reached
     end_reached = False
+
+    # Keep removing duplicates until end of linked list reached
     while head.next:
-        print(head.value)
+        # Add value of current node to set.
         seen.add(head.value)
+
+        # Keep removing next node until we encounter a node value not seen in set
         while head.next.value in seen:
+            # Reattach head.next to head.next.next if head.next.next exists
             if head.next.next:
                 attach_node(head, head.next.next)
+            # This means head.next is end of linked list
             else:
                 head.next = None
                 end_reached = True
                 break
+        # Only move if head.next is not last node in linked list
         if not end_reached:
             head = head.next
 
