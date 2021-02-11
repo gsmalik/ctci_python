@@ -102,6 +102,38 @@ def traverse_linked_list(head, forward=True):
             head = head.previous
         print(head.value)
 
+def determine_length_linked_list(head, forward=True):
+    """
+    Function to determine length of linked list.
+
+    Parameters
+    ----------
+    head: ``Node``
+        Head node of linked list.
+
+    forward: ``bool``
+        Whether to connect to next or previous. Defaults to True.
+
+    Time Complexity
+    ---------------
+    O(N)
+
+    Space Complexity
+    ----------------
+    O(1)
+    """
+    length = 1
+    if forward:
+        while head.next:
+            length += 1
+            head = head.next
+    else:
+        while head.previous:
+            length += 1
+            head = head.previous
+    return length
+
+
 # class linkedList():
 #     def __init__(self):
 #         self.value = None
