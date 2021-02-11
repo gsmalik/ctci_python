@@ -1,5 +1,5 @@
 import numpy as np
-import linkled_list as ll
+import linked_list as ll
 
 def remove_duplicates(head):
     """
