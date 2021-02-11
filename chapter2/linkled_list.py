@@ -102,33 +102,6 @@ def traverse_linked_list(head, forward=True):
             head = head.previous
         print(head.value)
 
-
-def remove_duplicates(head):
-    # Create a set to store seen values
-    seen = set([])
-    # Flag to store whether end of linked list is reached
-    end_reached = False
-
-    # Keep removing duplicates until end of linked list reached
-    while head.next:
-        # Add value of current node to set.
-        seen.add(head.value)
-
-        # Keep removing next node until we encounter a node value not seen in set
-        while head.next.value in seen:
-            # Reattach head.next to head.next.next if head.next.next exists
-            if head.next.next:
-                attach_node(head, head.next.next)
-            # This means head.next is end of linked list
-            else:
-                head.next = None
-                end_reached = True
-                break
-        # Only move if head.next is not last node in linked list
-        if not end_reached:
-            head = head.next
-
-
 # class linkedList():
 #     def __init__(self):
 #         self.value = None
