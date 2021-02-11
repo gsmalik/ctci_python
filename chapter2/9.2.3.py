@@ -35,7 +35,7 @@ def delete_middle_node(node):
 
 def return_k_to_last(head, k):
     """
-    Function to k from last node of linked list.
+    Function to return k from last node of linked list.
 
     Parameters
     ----------

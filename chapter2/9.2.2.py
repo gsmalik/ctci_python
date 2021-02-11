@@ -5,7 +5,7 @@ import linked_list as ll
 
 def return_k_to_last(head, k):
     """
-    Function to k from last node of linked list.
+    Function to return k from last node of linked list.
 
     Parameters
     ----------
@@ -29,7 +29,7 @@ def return_k_to_last(head, k):
     # Traverse ``length_linked_list`` - ``K`` nodes
     for _ in range(length_linked_list - k):
         head = head.next
-    
+
     return head
 
 
