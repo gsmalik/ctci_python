@@ -133,6 +133,42 @@ def determine_length_linked_list(head, forward=True):
             head = head.previous
     return length
 
+def reverse_linked_list(head):
+    """
+    Function to reverse linked list.
+
+    Parameters
+    ----------
+    head: ``Node``
+        Head node of linked list.
+
+    Returns
+    -------
+    Head node of type ``Node`` of reversed linked list.
+
+    Time Complexity
+    ---------------
+    O(N)
+
+    Space Complexity
+    ----------------
+    O(1)
+    """
+    # Reverse connect linked list
+    while head.next:
+        head.next.previous = head
+        head = head.next
+    to_return_node = head
+
+    # Set forward connections equal to reverse connectsions and cut off reverse
+    # connections
+    while head:
+        head.next = head.previous
+        head.previous = None
+        head = head.next
+    
+    return to_return_node
+
 
 # class linkedList():
 #     def __init__(self):
