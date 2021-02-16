@@ -102,6 +102,7 @@ def traverse_linked_list(head, forward=True):
             head = head.previous
         print(head.value)
 
+
 def determine_length_linked_list(head, forward=True):
     """
     Function to determine length of linked list.
@@ -133,6 +134,7 @@ def determine_length_linked_list(head, forward=True):
             head = head.previous
     return length
 
+
 def reverse_linked_list(head):
     """
     Function to reverse linked list.
@@ -155,6 +157,7 @@ def reverse_linked_list(head):
     O(1)
     """
     # Reverse connect linked list
+    current_pointer = head
     while head.next:
         head.next.previous = head
         head = head.next
@@ -166,136 +169,32 @@ def reverse_linked_list(head):
         head.next = head.previous
         head.previous = None
         head = head.next
-    
+
     return to_return_node
 
 
-# class linkedList():
-#     def __init__(self):
-#         self.value = None
-#         self.next = None
-#         self.previous = None
+def traverse_linked_list_steps(head, steps):
+    """
+    Function to linked list by specified steps.
 
-#     def add_next(self, class_object):
-#         self.next = class_object
+    Parameters
+    ----------
+    head: ``Node``
+        Head node of linked list.
 
-#     def add_previous(self, class_object):
-#         self.previous = class_object
+    steps: ``int``
+        Number of steps to traverse. Must not exceed length of linked list.
 
+    Time Complexity
+    ---------------
+    O(steps)
 
-#     def createLinkedList(self, array):
-#         head = self
-#         for value in array[:-1]:
-#             head.value = value
-#             head.next = linkedList()
-#             head = head.next
-#         head.value = array[-1]
+    Space Complexity
+    ----------------
+    O(1)
+    """
 
-#     def traverseLinkedList(self):
-#         head = self
-#         print(head.value, end=' ')
-#         while head.next != None:
-#             head = head.next
-#             print(head.value, end=' ')
-#         print("\n")
-
-
-#     def removeDuplicates(self):
-#         head = self
-#         seen = set([])
-#         while(head.next!=None):
-#             seen.add(head.value)
-#             duplicateRemoved = 0
-#             while head.next.value in seen:
-#                 duplicateRemoved = 1
-#                 if head.next.next is None:
-#                     head.next = None
-#                 else:
-#                     head.next = head.next.next
-#             if not duplicateRemoved:
-#                 head = head.next
-
-#     def determineLengthList(self):
-#         head = self
-#         self.length = 0
-#         while head:
-#             self.length += 1
-#             head = head.next
-
-#     def returnKthtoLast(self,k):
-#         self.determineLengthList()
-#         head = self
-#         for _ in range(self.length - k -1):
-#             head = head.next
-#         return head.value
-
-#     def deleteKthfromFront(self,k):
-#         head = self
-#         for _ in range(k):
-#             head = head.next
-#         self.deleteFromHead(head)
-
-#     def deleteFromHead(self, head):
-#         while head.next.next != None:
-#             self.traverseLinkedList()
-#             head.value = head.next.value
-#             head = head.next
-#         head.value = head.next.value
-#         head.next = None
-
-
-#     def partitionList(self, x):
-#         self.lessThanList = []
-#         self.greaterThanList = []
-#         self.xInList = False
-#         head = self
-#         self.lessThanList.append(head.value) if head.value <= x else self.greaterThanList.append(head.value)
-#         if head.value == x:
-#             self.xInList = True
-#         while head.next != None:
-#             head = head.next
-#             if head.value == x:
-#                 self.xInList = True
-#             self.lessThanList.append(head.value) if head.value <= x else self.greaterThanList.append(head.value)
-
-#         self.lessThanLinkedList = linkedList()
-#         self.lessThanLinkedList.createLinkedList(self.lessThanList)
-
-#         self.greaterThanLinkedList = linkedList()
-#         self.greaterThanLinkedList.createLinkedList(self.greaterThanList)
-
-#         self.lessThanLinkedList.traverseLinkedList()
-#         self.greaterThanLinkedList.traverseLinkedList()
-
-#     def createNumberFromList(self):
-#         head = self
-#         multiplier = 1
-#         number = head.value * multiplier
-#         while head.next != None:
-#             head = head.next
-#             multiplier = multiplier * 10
-#             number = number + multiplier * head.value
-#         return number
-
-#     def reverseLinkedList(self):
-#         self.createArrayFromList()
-#         self.reversedList = linkedList()
-#         self.reversedList.createLinkedList(np.flip(self.arrayFromList))
-#         self.reversedList.createArrayFromList()
-
-#     def createArrayFromList(self):
-#         myList = []
-#         head = self
-#         myList.append(head.value)
-#         while head.next != None:
-#             head = head.next
-#             myList.append(head.value)
-
-#         self.arrayFromList = np.array(myList)
-
-#     def checkPalindrome(self):
-#         self.determineLengthList()
-#         self.palindrome = True
-#         for index in range(self.length):
-#             if self.arrayFromList[index] != self.reversedList.arrayFromList[index]:
-#                 self.palindrome = False
+    for _ in range(steps):
+        assert head, "Number of steps greater than length of linked list"
+        head = head.next
+    return head
