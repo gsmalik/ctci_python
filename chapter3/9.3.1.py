@@ -97,6 +97,18 @@ class KStacks():
         self.top_indices[stack_num] = index_push
 
     def pop(self, stack_num):
+        """
+        Function to pop element from top of selected stack.
+
+        Parameters
+        ----------
+        stack_num: ``int``
+            The stack to push the element to
+
+        Time Complexity
+        ---------------
+        O(1)
+        """
         # Check if there is something to pop.
         if self.top_indices[stack_num] == -1:
             print(f"Pop Failed for stack #{stack_num}. Its empty.")
