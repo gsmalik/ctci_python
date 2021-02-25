@@ -36,7 +36,12 @@ class PlateStacks:
         self.q = list(range(k))
 
         # This array keeps a track of src stack which spilled causing the cuurent
-        # stack to be used.
+        # stack to be used. This is useful in cases when a ``pop` function is
+        # requested and the current stack with the most recent push has become
+        # empty, which can happen if your current stack had pushes then pops. For
+        # examplle, you could push 2 elements to your current stack and then pop
+        # them both. A next pop should be from a differnt stack, the one which
+        # was the active stack before this. This tracks that.
         self.spill_src = [-1] * k
 
         self.occupied = 0
