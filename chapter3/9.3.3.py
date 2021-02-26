@@ -1,7 +1,7 @@
 class PlateStacks:
     """
     A class that implements K stacks of certain maximum depth and exposes an API
-    that funtions as a single stack for the end user.
+    that functions as a single stack for the end user.
 
     Parameters
     ----------
@@ -40,7 +40,7 @@ class PlateStacks:
         # requested and the current stack with the most recent push has become
         # empty, which can happen if your current stack had pushes then pops. For
         # examplle, you could push 2 elements to your current stack and then pop
-        # them both. A next pop should be from a differnt stack, the one which
+        # them both. A next pop should be from a different stack, the one which
         # was the active stack before this. This tracks that.
         self.spill_src = [-1] * k
 
