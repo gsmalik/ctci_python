@@ -5,7 +5,7 @@ class SortedStack:
 
     Space Complexity
     ----------------
-    O(1). We do not use ant additional space apart from the given stack.
+    O(1). We do not use any additional space apart from the given stack.
     """
 
     def __init__(self):
