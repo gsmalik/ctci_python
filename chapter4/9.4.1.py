@@ -1,85 +1,57 @@
 import numpy as np
+# You need to install ``python-igraph`` and ``cairocffi``
 import igraph
 import string
+import graphs
 
-class node():
-    def __init__(self, value):
-        self.value = value
-        self.connected_nodes = []
-        self.visited = False
+def find_route(node_1, node_2):
+    """
+    Function to find wether there is a route between given nodes.
 
-    def addNode(self, vertex):
-        self.connected_nodes.append(vertex)
-    
-    def printConnectedNodes(self):
-        for node in self.connected_nodes:
-            print(node.value)
+    Parameters
+    ----------
+    node_1: ``Node``
+        One of the two nodes to find route between.
 
-class binaryNode():
-    def __init__(self, value):
-        self.value = value
-        self.left = None
-        self.right = None
-        self.visited = False
-
-    def addNodeLeft(self, vertex):
-        self.left = vertex
-
-    def addNodeRight(self, vertex):
-        self.right = vertex
-
-    def printConnectedNodes(self):
-        print(self.left, self.right)
-
-def createGraph(adjMatrix, num_vertices):
-    nodes = []
-    for vertex in range(num_vertices):
-        nodes.append(node(vertex))
-
-    for row in range(num_vertices):
-        for column in range(num_vertices):
-            if adjMatrix[row][column] == 1:
-                nodes[row].addNode(nodes[column])
-    return nodes
-
-def createBinarySearchTree(array):
-    nodes = []
-    for element in array:
-        nodes.append(binaryNode(element))
-    
-
-    bstQueue = []
-    bstQueue.append(nodes[0])
-
-    while bstQueue:
-        currentNode = 
-
-def breadthFirstSearch(rootNode):
-    bfsQueue = []
-    bfsQueue.append(rootNode)
-
-    while bfsQueue:
-
-        currentNode = bfsQueue.pop(0)
-        print("Visited", currentNode.value)
-        currentNode.visited = True
-        for neighbour in currentNode.connected_nodes:
-            if not neighbour.visited:
-                bfsQueue.append(neighbour)
+    node_2: ``Node``
+        Second of the two nodes to find route between.
 
 
+    Time Complexity
+    ---------------
+    O(N), where N is the number of vertices in graph.
+
+    Space Complexity
+    ---------------
+    O(N), where N is the number of vertices in graph.
+    """
+    print("Checking for path from node_1 to node_2")
+    graphs.bfs(node_1, node_2)
+    print("Checking for path from node_2 to node_1")
+    graphs.bfs(node_2, node_1)
 
 num_vertices = 7
+src_node = 0
+target_node = 4
+
+# Used for visualizing the graph
 labels = []
 for index in range(num_vertices):
     labels.append(str(index))
 
+# Create a random adjacency matrix for graph connectivity.
 adj_matrix = np.random.randint(0,2,(num_vertices,num_vertices))
-
+# Just keeping things a bit more interesting by preventing direct edges.
+adj_matrix[src_node][target_node] = 0
 print(adj_matrix)
 
-nodes = createGraph(adj_matrix, num_vertices)
-breadthFirstSearch(nodes[0])
+# Create graph using ``adj_matrix`` and return a list
+# of nodes in the graph for easy access to each node.
+nodes = graphs.create_graph(adj_matrix, num_vertices)
+
+# Find route between the nodes
+find_route(nodes[src_node], nodes[target_node])
+# Visualize graph for confirmation.
 g = igraph.Graph.Adjacency((adj_matrix > 0).tolist())
 g.vs['label'] = labels
 
