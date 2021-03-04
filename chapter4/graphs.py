@@ -1,12 +1,59 @@
 class Heap:
+    """
+    A class that implements a heap using a complete binary tree.
+
+    Parameters
+    ----------
+    style: ``str``
+       Wether the heap has to act as a min` heap or a `max` heap.
+
+    Space Complexity
+    ----------------
+    O(N), where N is the number of nodes in the heap.
+    """
+
     def __init__(self, style):
         assert style in ["min", "max"]
         self.style = style
         self.array = []
 
-    def insert(self, value):
-        def __swap_elements(node_index):
+    def insert(self, element):
+        """
+        Function to insert element in the heap
+
+        Parameters
+        ----------
+        element: ``FP32``
+            Element that needs to be inserted in the heap.
+
+        Time Complexity
+        ---------------
+        O(log(N)), determined by the ``__bubble_up`` function.
+        """
+
+        def __bubble_up(node_index):
+            """
+            Function to bubble up elements to find correction of element in the
+            heap
+
+            Parameters
+            ----------
+            node_index: ``int``
+                Index of element in the array which is used to represent the binary
+                heap
+
+            Time Complexity
+            ---------------
+            O(log(N)), where N is the number of nodes in the heap. You move up a level
+            each time you bubble up. In worst case, the element could be the min/max
+            and might need to be bubbled all the way to the top.
+            """
+            # Find out parent index of the node
             parent_index = (node_index - (1 if node_index % 2 else 2)) // 2
+            # Determine if you need to swap. You do not need to compare the
+            # element with its sibling, only its parent. This is because the heap
+            # relationship is already satisfied between the parent and its
+            # sibling.
             swap = (
                 (
                     self.style == "max"
@@ -17,26 +64,61 @@ class Heap:
                     and self.array[parent_index] > self.array[node_index]
                 )
             ) and node_index > 0
+
+            # Swap parent and node if needed.
             if swap:
                 self.array[parent_index], self.array[node_index] = (
                     self.array[node_index],
                     self.array[parent_index],
                 )
+            # Return wether you swapped and the new index of the node, which is
+            # parent index (only applicable when swap is True).
             return [swap, parent_index]
 
-        self.array.append(value)
+        # Add element to end of heap array.
+        self.array.append(element)
+
+        # Keep bubbling up element until necessary
         current_index = len(self.array) - 1
-        while (returned := __swap_elements(current_index))[0]:
+        while (returned := __bubble_up(current_index))[0]:
             current_index = returned[1]
-        print(f"Heap afer inserting {value} is {self.array}")
+        print(f"Heap afer inserting {element} is {self.array}")
 
     def peak(self):
+        """Returns value of element at top of heap."""
         return self.array[0]
 
     def remove_top(self):
+        """
+        Function to remove element in top of heap and rearrange heap
+
+        Time Complexity
+        ---------------
+        O(log(N)), determined by the ``__bubble_down`` function.
+        """
         def __bubble_down(parent_index):
+            """
+            Function to bubble down elements to find correction of element in the
+            heap
+
+            Parameters
+            ----------
+            parent_index: ``int``
+                Index of element in the array which is used to represent the binary
+                heap
+
+            Time Complexity
+            ---------------
+            O(log(N)), where N is the number of nodes in the heap. You move down a 
+            level each time you bubble up. In worst case, the element could need to
+            be bubbled all the way down.
+            """
+            # Assert that there is room to bubble down to
             if 2 * parent_index + 1 >= len(self.array):
                 return [False, parent_index]
+
+            # Determine which sibling we will compare with to decide wether to bubble
+            # down or not.
             compare_index = (
                 2 * parent_index + 1
                 if (
@@ -54,6 +136,8 @@ class Heap:
                 )
                 else 2 * parent_index + 2
             )
+
+            # Determine wether we need to swap or not.
             swap = (
                 (
                     self.style == "max"
@@ -65,15 +149,24 @@ class Heap:
                 )
                 and compare_index < len(self.array)
             )
+
+            # Make the swap if needed
             if swap:
                 self.array[parent_index], self.array[compare_index] = (
                     self.array[compare_index],
                     self.array[parent_index],
                 )
+            # Return information about wether we made the swap and what the new index
+            # is (only applicable when swap is made).
             return [swap, compare_index]
 
+        # Pop the element at the top
         val_return = self.array[0]
+
+        # Make the last element in the heap as the top element in the heap
         self.array[0] = self.array.pop()
+
+        # Keep bubbling down as needed
         current_index = 0
         while (returned := __bubble_down(current_index))[0]:
             current_index = returned[1]
@@ -103,7 +196,8 @@ def dfs(node):
         if not neighbour.visited:
             dfs(neighbour)
 
-class Node():
+
+class Node:
     def __init__(self, value):
         self.value = value
         self.connected_nodes = []
@@ -111,10 +205,22 @@ class Node():
 
     def addNode(self, vertex):
         self.connected_nodes.append(vertex)
-    
+
     def printConnectedNodes(self):
         for node in self.connected_nodes:
             print(node.value)
+
+
+class BinaryNode:
+    def __init__(self, value):
+        self.value = value
+        self.left = None
+        self.right = None
+
+    def printConnectedNodes(self):
+        print(f"Left: {self.left} with value {self.left.value}")
+        print(f"Right: {self.right} with value {self.right.value}")
+
 
 def create_graph(adj_matrix, num_vertices):
     nodes = []
