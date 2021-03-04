@@ -82,7 +82,7 @@ class Heap:
         current_index = len(self.array) - 1
         while (returned := __bubble_up(current_index))[0]:
             current_index = returned[1]
-        print(f"Heap afer inserting {element} is {self.array}")
+        print(f"Heap after inserting {element} is {self.array}")
 
     def peak(self):
         """Returns value of element at top of heap."""
@@ -96,6 +96,7 @@ class Heap:
         ---------------
         O(log(N)), determined by the ``__bubble_down`` function.
         """
+
         def __bubble_down(parent_index):
             """
             Function to bubble down elements to find correction of element in the
@@ -109,7 +110,7 @@ class Heap:
 
             Time Complexity
             ---------------
-            O(log(N)), where N is the number of nodes in the heap. You move down a 
+            O(log(N)), where N is the number of nodes in the heap. You move down a
             level each time you bubble up. In worst case, the element could need to
             be bubbled all the way down.
             """
@@ -170,23 +171,51 @@ class Heap:
         current_index = 0
         while (returned := __bubble_down(current_index))[0]:
             current_index = returned[1]
-        print(f"Heap afer popping {val_return} is {self.array}")
+        print(f"Heap after popping {val_return} is {self.array}")
 
 
 def bfs(start_node, target_node):
+    """
+    Function to perform breadth first search over a graph
+
+    Parameters
+    ----------
+    start_node: ``Node``
+        The starting node from which BFS will be launched
+    target_node: ``Node``
+        The node being searched for
+
+    Time Complexity
+    ---------------
+    O(N), where N is the number of nodes in the graph. In the worst case, the target
+    node could be the last node found over bread first search. You can also write this
+    as O(average_fanout*levels), where average_fanout is the average number of directed
+    connections from one node to others and levels is the number of levels between
+    source node and target node.
+
+    Space Complexity
+    ---------------
+    O(N), where N is the number of nodes in the graph. In the worst case, the target
+    node could be the last node found over bread first search.
+    """
+    # Create a queue and add the starting node to it
     bfs_queue = []
     bfs_queue.append(start_node)
 
     while bfs_queue:
+        # Pop from front of queue
         current_node = bfs_queue.pop(0)
         print("Visited", current_node.value)
+        # Mark it as true to avoid deadlocks in cyclic graphs
         current_node.visited = True
-        for neighbour in current_node.connected_nodes:
-            if neighbour == target_node:
+        # Add all of its unvisited neighbors to queue
+        for neighbor in current_node.connected_nodes:
+            # Return if node found
+            if neighbor == target_node:
                 print(f"Found {target_node}")
                 return
-            if not neighbour.visited:
-                bfs_queue.append(neighbour)
+            if not neighbor.visited:
+                bfs_queue.append(neighbor)
 
 
 def dfs(node):
