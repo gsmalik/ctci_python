@@ -221,9 +221,9 @@ def bfs(start_node, target_node):
 def dfs(node):
     print(f"Visited {node.value}")
     node.visited = True
-    for neighbour in node.connected_nodes:
-        if not neighbour.visited:
-            dfs(neighbour)
+    for neighbor in node.connected_nodes:
+        if not neighbor.visited:
+            dfs(neighbor)
 
 
 class Node:
@@ -245,10 +245,31 @@ class BinaryNode:
         self.value = value
         self.left = None
         self.right = None
+        self.parent = None
 
     def printConnectedNodes(self):
         print(f"Left: {self.left} with value {self.left.value}")
         print(f"Right: {self.right} with value {self.right.value}")
+
+
+def create_bst(array, parent_node):
+    root = Node(array[len(array) // 2])
+    root.parent = parent_node
+    root.left = create_bst(array[: len(array) // 2], root) if len(array) > 1 else None
+    root.right = (
+        create_bst(array[len(array) // 2 + 1 :], root) if len(array) > 2 else None
+    )
+    return root
+
+
+def in_order(node):
+    if node is None:
+        return
+    in_order(node.left)
+    print(
+        f"Visited {node.value} with parent {node.parent.value if node.parent else 'no parent'}"
+    )
+    in_order(node.right)
 
 
 def create_graph(adj_matrix, num_vertices):
