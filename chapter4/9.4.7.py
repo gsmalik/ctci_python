@@ -1,77 +1,77 @@
 import igraph
 import numpy as np
 
-def findMaxDependency(nodes):
-    maxDependency = -1
-    for node in nodes:
-        if len(node.connected_nodes) > maxDependency:
-            startNode = node
-            maxDependency = len(node.connected_nodes)
-    return startNode
 
-class Node():
+def find_max_dependency(projects):
+    start_project = projects[0]
+    max_dependents = len(projects[0].blocking_projects)
+    for project in projects[1:]:
+        if len(project.blocking_projects) > max_dependents:
+            start_project = project
+            max_dependents = len(project.blocking_projects)
+    return start_project
+
+
+class Project:
     def __init__(self, value):
         self.value = value
-        self.connected_nodes = []
+        self.blocking_projects = []
         self.visited = False
         self.done = False
 
-    def addNode(self, vertex):
-        self.connected_nodes.append(vertex)
-    
-    def printConnectedNodes(self):
-        for node in self.connected_nodes:
-            print(node.value)
+    def add_project(self, vertex):
+        self.blocking_projects.append(vertex)
 
 
-def createGraph(adjMatrix, num_vertices):
-    nodes = []
+def create_graph(adj_matrix, num_vertices):
+    projects = []
     for vertex in range(num_vertices):
-        nodes.append(Node(vertex))
+        projects.append(Project(vertex))
 
     for row in range(num_vertices):
         for column in range(num_vertices):
-            if adjMatrix[row][column] == 1:
-                nodes[row].addNode(nodes[column])
-    return nodes
+            if adj_matrix[row][column] == 1:
+                projects[row].add_project(projects[column])
+    return projects
 
-def visitInOrder(node, nodes):
-    if node.visited:
-        assert False, "Unsolvable Dependencies"
-    node.visited = True
-    for connection in node.connected_nodes:
-        if not connection.done:
-            nodes = visitInOrder(connection, nodes)
-    print("Finishing", node.value)
-    node.done = True
-    nodes = removeNode(node, nodes)
-    return nodes
+
+def do_project(project):
+    if project.visited:
+        print(f"Project {project.value} has unresolvable dependencies")
+        exit()
+    project.visited = True
+    for blocking_project in project.blocking_projects:
+        if not blocking_project.done:
+            do_project(blocking_project )
+    project.done = True
+    print(f"Done project {project.value}")    
+
     
-def removeNode(remove_node, nodes):
-    newList = []
-    for node in nodes:
-        if not node == remove_node:
-            newList.append(node)
-    return newList
 
-num_vertices = 3
-labels = []
-for index in range(num_vertices):
-    labels.append(str(index))
 
-adj_matrix = np.random.randint(0,2,(num_vertices,num_vertices))
+num_projects = 3
+labels = list(map(str, range(num_projects)))
+
+# Create dependency pairs
+adj_matrix = np.random.randint(0, 2, (num_projects, num_projects))
+# Make sure project is not dependent on itself
 np.fill_diagonal(adj_matrix, 0)
 
-nodes = createGraph(adj_matrix, num_vertices)
-while nodes:
-    startNode = findMaxDependency(nodes)
-    nodes = visitInOrder(startNode, nodes)
+print(adj_matrix)
 
-g = igraph.Graph.Adjacency((adj_matrix > 0).tolist())
-g.vs['label'] = labels
-igraph.plot(g, labels=True)
+# Create graph of connected projects, where the fanout of a particular project is
+# the number of projects it depends on.
+projects = create_graph(adj_matrix, num_projects)
 
 
+start_project = find_max_dependency(projects)
+do_project(start_project)
 
+# Do projects which do not block other projects
+for project in projects:
+    if not project.done:
+        print(f"Done project {project.value}")    
 
-
+# g = igraph.Graph.Adjacency((adj_matrix > 0).tolist())
+# g.vs["label"] = labels
+# igraph.plot(g, labels=True)
