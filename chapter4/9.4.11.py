@@ -8,13 +8,11 @@ class Node:
         self.right = None
         self.left_size = 0
         self.right_size = 0
-        self.count = 0
 
 
 class BinarySearchTree:
     def __init__(self, val):
         self.root_node = Node(val)
-        self.paths = ["0"]
 
     def insert(self, node):
         current_node = self.root_node
@@ -72,7 +70,6 @@ class BinarySearchTree:
         # self.insert(node)
 
     def return_random_node(self):
-        # choose randomly from self.paths
         return self.randomly_select(self.root_node)
 
     def find(self, val):
