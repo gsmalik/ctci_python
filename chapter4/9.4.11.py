@@ -10,94 +10,89 @@ class Node:
         self.right_size = 0
         self.count = 0
 
-    def returnNode(self):
-        treeSize = self.left_size + self.right_size + 1
-        dice = np.random.multinomial(
-            1,
-            [1 / treeSize, self.left_size / treeSize, self.right_size / treeSize],
-            size=1,
-        )[0]
-        if dice[0] == 1:
-            self.count += 1
-            return self.val
-        if dice[1] == 1:
-            return self.left.returnNode()
-        else:
-            return self.right.returnNode()
 
-
-class BinaryTree:
+class BinarySearchTree:
     def __init__(self, val):
-        self.rootNode = Node(val)
-        self.currentNode = self.rootNode
+        self.root_node = Node(val)
         self.paths = ["0"]
 
     def insert(self, node):
-        self.currentNode = self.rootNode
-        self.path = self.paths[0]
-        while self.currentNode:
-            if node.val >= self.currentNode.val:
-                self.currentNode.right_size += node.left_size + node.right_size + 1
-                if not self.currentNode.right:
-                    self.currentNode.right = node
-                    self.currentNode = None
+        current_node = self.root_node
+        while True:
+            if current_node.val > node.val:
+                current_node.left_size += node.left_size + node.right_size + 1
+                if current_node.left:
+                    current_node = current_node.left
                 else:
-                    self.currentNode = self.currentNode.right
-                self.path = self.path + "1"
+                    current_node.left = node
+                    break
             else:
-                self.currentNode.left_size += node.left_size + node.right_size + 1
-                if not self.currentNode.left:
-                    self.currentNode.left = node
-                    self.currentNode = None
+                current_node.right_size += node.left_size + node.right_size + 1
+                if current_node.right:
+                    current_node = current_node.right
                 else:
-                    self.currentNode = self.currentNode.left
-                self.path = self.path + "0"
-        self.currentNode = node
-        self.paths.append(self.path)
+                    current_node.right = node
+                    break
 
-    def deleteNode(self, node):
-        currentNode = self.rootNode
-        while currentNode.left != node and currentNode.right != node:
-            if currentNode.val > node.val:
-                currentNode.left_size -= node.left_size + node.right_size + 1
-                currentNode = getattr(currentNode, "left")
-            else:
-                currentNode.right_size -= node.left_size + node.right_size + 1
-                currentNode = getattr(currentNode, "right")
-
-        newNode_left = node.left
-        newNode_right = node.right
-
-        if currentNode.left == node:
-            currentNode.left_size -= node.left_size + node.right_size + 1
-            currentNode.left = None
+    def randomly_select(self, node):
+        tree_size = node.left_size + node.right_size + 1
+        dice = np.random.multinomial(
+            1,
+            [1 / tree_size, node.left_size / tree_size, node.right_size / tree_size],
+            size=1,
+        )[0]
+        if dice[0] == 1:
+            return node
+        if dice[1] == 1:
+            return self.randomly_select(node.left)
         else:
-            currentNode.right_size -= node.left_size + node.right_size + 1
-            currentNode.right = None
+            return self.randomly_select(node.right)
 
-        if newNode_left:
-            self.insert(newNode_left)
-        if newNode_right:
-            self.insert(newNode_right)
+    def delete_node(self, node):
+        current_node = self.root_node
+        while current_node.left != node and current_node.right != node:
+            if current_node.val > node.val:
+                current_node.left_size -= node.left_size + node.right_size + 1
+                current_node = current_node.left
+            else:
+                current_node.right_size -= node.left_size + node.right_size + 1
+                current_node = current_node.right
 
-    def randomly_select(self):
+        if current_node.left == node:
+            current_node.left_size -= node.left_size + node.right_size + 1
+            current_node.left = None
+        else:
+            current_node.right_size -= node.left_size + node.right_size + 1
+            current_node.right = None
+
+        if node.left:
+            self.insert(node.left)
+        if node.right:
+            self.insert(node.right)
+        # self.insert(node)
+
+    def return_random_node(self):
         # choose randomly from self.paths
-        return self.rootNode.returnNode()
+        return self.randomly_select(self.root_node)
 
     def find(self, val):
-        self.find_node = self.rootNode
-        while self.find_node.val != val and self.find_node is not None:
+        self.find_node = self.root_node
+        while True:
+            if self.find_node is None:
+                print(f"Cannot find {val}")
+                return None
+            if self.find_node.val == val:
+                print(f"Found {val}")
+                return self.find_node
             if self.find_node.val > val:
                 self.find_node = self.find_node.left
             else:
                 self.find_node = self.find_node.right
 
-        return self.find_node
-
-    def BFT(self):
-        bftQ = [self.rootNode]
-        while bftQ:
-            currentNode = bftQ[0]
+    def bft(self):
+        bft_q = [self.root_node]
+        while bft_q:
+            currentNode = bft_q[0]
             print(
                 currentNode.val,
                 currentNode.left_size,
@@ -105,14 +100,14 @@ class BinaryTree:
                 currentNode.count,
             )
             if currentNode.left:
-                bftQ.append(currentNode.left)
+                bft_q.append(currentNode.left)
             if currentNode.right:
-                bftQ.append(currentNode.right)
-            bftQ.pop(0)
+                bft_q.append(currentNode.right)
+            bft_q.pop(0)
 
 
 # Test Inserts
-myBST = BinaryTree(2)
+myBST = BinarySearchTree(2)
 myBST.insert(Node(1))
 myBST.insert(Node(3))
 myBST.insert(Node(-1))
@@ -124,9 +119,9 @@ myBST.insert(Node(1.75))
 myBST.insert(Node(-3))
 myBST.insert(Node(-1.5))
 myBST.insert(Node(1.12))
-
-myBST.deleteNode(myBST.rootNode.left.left)
-myBST.deleteNode(myBST.rootNode.right)
-for _ in range(100000):
-    myBST.randomly_select()
-myBST.BFT()
+myBST.bft()
+node = myBST.root_node.left.left
+print(f"deleting {node.val}")
+myBST.delete_node(node)
+myBST.bft()
+print(f"generating random node: {myBST.return_random_node().val}")
