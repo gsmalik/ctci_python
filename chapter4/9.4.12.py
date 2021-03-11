@@ -1,28 +1,30 @@
 from binarytree import tree, bst
 
-def DFS(node, sums, hashTable):
+
+def depth_first_search(node, sums, hashtable):
     sums = [x + node.val for x in sums]
     sums.append(node.val)
-    hashTable = updateHashTable(sums, hashTable)
+    hashtable = update_hashtable(sums, hashtable)
     if node.left:
-        hashTable = DFS(node.left, sums, hashTable)
+        hashtable = depth_first_search(node.left, sums, hashtable)
     if node.right:
-        hashTable = DFS(node.right, sums, hashTable)
-    return hashTable
+        hashtable = depth_first_search(node.right, sums, hashtable)
+    return hashtable
 
-def updateHashTable(sums, hashTable):
+
+def update_hashtable(sums, hashtable):
     for val in sums:
-        if val in hashTable:
-            hashTable[val] += 1
+        if val in hashtable:
+            hashtable[val] += 1
         else:
-            hashTable[val] = 1
-    return hashTable
+            hashtable[val] = 1
+    return hashtable
 
 
-def listSumPaths(rootNode):
-    return (DFS(rootNode, [], {}))
+def count_sum_paths(rootNode):
+    return depth_first_search(rootNode, [], {})
 
 
 test = tree(3)
 print(test)
-print(listSumPaths(test.levels[0][0]))
+print(count_sum_paths(test.levels[0][0]))
