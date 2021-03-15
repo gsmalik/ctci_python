@@ -218,12 +218,38 @@ def bfs(start_node, target_node):
                 bfs_queue.append(neighbor)
 
 
-def dfs(node):
-    print(f"Visited {node.value}")
-    node.visited = True
-    for neighbor in node.connected_nodes:
+def dfs(start_node, target_node):
+    """
+    Function to perform depth first search over a graph
+
+    Parameters
+    ----------
+    start_node: ``Node``
+        The starting node from which BFS will be launched
+    target_node: ``Node``
+        The node being searched for
+
+    Time Complexity
+    ---------------
+    O(N), where N is the number of nodes in the graph. In the worst case, the target
+    node could be the last node found over depth first search.
+
+    Space Complexity
+    ---------------
+    O(log(N)), where N is the number of nodes in the graph. In the worst case, the target
+    node could be in last level of the tree.
+    """
+    print(f"Visited {start_node.value}")
+    # Mark the starting node as visited
+    start_node.visited = True
+    # Traverse through neighbors of this node and perform DFS on each.
+    for neighbor in start_node.connected_nodes:
+        # Return if node found
+        if neighbor == target_node:
+            print(f"Found {target_node}")
+            return
         if not neighbor.visited:
-            dfs(neighbor)
+            dfs(neighbor, target_node)
 
 
 class Node:
