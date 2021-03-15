@@ -316,7 +316,7 @@ def create_bst(array, parent_node):
 
     Returns
     -------
-    The root node if the BST.
+    The root node of the BST.
 
     Time Complexity
     ---------------
