@@ -372,12 +372,40 @@ def in_order(node):
 
 
 def create_graph(adj_matrix, num_vertices):
+    """
+    A function to create a directed graph using the given adjacency matrix.
+
+    Parameters
+    ----------
+    adj_matrix: ``np.ndarray``
+        An adjacency matrix where a connection is signified to exist between two nodes
+        with a setting of the tuple cordinate of the two nodes in the matrix.
+
+    num_vertices: ``int``
+        The number of nodes in the graph.
+
+    Returns
+    -------
+    A list of vertices in the graph.
+
+    Time Complexity
+    ---------------
+    O(N^2), where N is the number of vertices.
+
+    Space Complexity:
+    -----------------
+    O(1).
+    """
+    # Create a list of vertices.
     nodes = []
     for vertex in range(num_vertices):
         nodes.append(Node(vertex))
 
+    # Iterate through the adjacency matrix and create appropriate connections.
     for row in range(num_vertices):
         for column in range(num_vertices):
             if adj_matrix[row][column] == 1:
                 nodes[row].addNode(nodes[column])
+
+    # Return list.
     return nodes
