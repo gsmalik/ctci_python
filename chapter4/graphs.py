@@ -188,10 +188,7 @@ def bfs(start_node, target_node):
     Time Complexity
     ---------------
     O(N), where N is the number of nodes in the graph. In the worst case, the target
-    node could be the last node found over bread first search. You can also write this
-    as O(average_fanout*levels), where average_fanout is the average number of directed
-    connections from one node to others and levels is the number of levels between
-    source node and target node.
+    node could be the last node found over bread first search.
 
     Space Complexity
     ---------------
