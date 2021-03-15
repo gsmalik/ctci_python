@@ -301,9 +301,43 @@ class BinaryNode:
 
 
 def create_bst(array, parent_node):
+    """
+    A function to create a binary search tree using a sorted array.
+
+    Parameters
+    ----------
+    array: ``list``
+        A standard (ascending) sorted array.
+    
+    parent_node: ``BinaryNode``
+        The parent node for this BST, if needed. Can be None if no parent.
+
+    Returns
+    -------
+    The root node if the BST.
+
+    Time Complexity
+    ---------------
+    O(N), where N is the number of elements in the array.
+
+    Space Complexity
+    ----------------
+    O(log(N)), where N is the number of elements in the array and you are not counting
+    the space occupied by the BST. If we neglect space of BST, then we consume a stack
+    space that could get as large as the depth of the BST, which will be, at maximum,
+    log(N). If we cannot neglect space of BST, the the complexity increases to O(N).
+    """
+    # Set root node of the BST as the middle element in the ascending sorted
+    # array.
     root = Node(array[len(array) // 2])
+
+    # Set the root node's parent.
     root.parent = parent_node
+    # Create a BST using the elements smaller than root node and connect that BST
+    # to the left connection of the root node.
     root.left = create_bst(array[: len(array) // 2], root) if len(array) > 1 else None
+    # Create a BST using the elements greater than root node and connect that BST
+    # to the right connection of the root node.
     root.right = (
         create_bst(array[len(array) // 2 + 1 :], root) if len(array) > 2 else None
     )
@@ -311,11 +345,13 @@ def create_bst(array, parent_node):
 
 
 def in_order(node):
+    """
+    """
     if node is None:
         return
     in_order(node.left)
     print(
-        f"Visited {node.value} with parent {node.parent.value if node.parent else 'no parent'}"
+        f"Visited {node.value} with {{ 'parent:' {node.parent.value} if node.parent else 'no parent'}}"
     )
     in_order(node.right)
 
