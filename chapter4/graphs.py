@@ -250,6 +250,18 @@ def dfs(start_node, target_node):
 
 
 class Node:
+    """
+    A class that implements a node that can have multiple connections.
+
+    Parameters
+    ----------
+    value: ``FP32``
+       The value of the node
+
+    Space Complexity
+    ----------------
+    O(N), where N is the number of connected nodes.
+    """
     def __init__(self, value):
         self.value = value
         self.connected_nodes = []
@@ -264,6 +276,19 @@ class Node:
 
 
 class BinaryNode:
+    """
+    A class that implements a binary node that can have let and/or right connections,
+    along with support for connection to its parent, if needed.
+
+    Parameters
+    ----------
+    value: ``FP32``
+       The value of the node
+
+    Space Complexity
+    ----------------
+    O(1).
+    """
     def __init__(self, value):
         self.value = value
         self.left = None
