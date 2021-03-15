@@ -262,6 +262,7 @@ class Node:
     ----------------
     O(N), where N is the number of connected nodes.
     """
+
     def __init__(self, value):
         self.value = value
         self.connected_nodes = []
@@ -289,6 +290,7 @@ class BinaryNode:
     ----------------
     O(1).
     """
+
     def __init__(self, value):
         self.value = value
         self.left = None
@@ -308,7 +310,7 @@ def create_bst(array, parent_node):
     ----------
     array: ``list``
         A standard (ascending) sorted array.
-    
+
     parent_node: ``BinaryNode``
         The parent node for this BST, if needed. Can be None if no parent.
 
@@ -346,6 +348,19 @@ def create_bst(array, parent_node):
 
 def in_order(node):
     """
+    Function to traverse a binary node and its connections using `in-order` traversal.
+
+    Parameters
+    ----------
+    node: ``BinaryNode``
+        The starting node for in-order traversal.
+
+    Time Complexity:
+        O(N), where N is the total number of node in the graph starting at ``node``.
+
+    Space Complexity:
+        O(log(N)), where N is the total number of node in the graph starting at
+        ``node``.
     """
     if node is None:
         return
