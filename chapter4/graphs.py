@@ -302,7 +302,7 @@ class BinaryNode:
         print(f"Right: {self.right} with value {self.right.value}")
 
 
-def create_bst(array, parent_node):
+def create_bst(array, parent_node=None):
     """
     A function to create a binary search tree using a sorted array.
 
