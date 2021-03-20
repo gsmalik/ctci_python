@@ -1,16 +1,34 @@
-number = 0.1252
+def num_to_binary(num):
+    """
+    Converts a given number to fixed point 32 bit representation.
 
-assert 0 < number < 1
+    Parameters
+    ----------
+    num: FP32
+        Number to get representation of.
 
-bits=0
-binary_repr = []
-while number != 0 and bits < 32:
-    bits+=1
-    if number - 2**(-bits) >= 0:
-        binary_repr.append("1")
-        number -= 2**(-bits)
-    else:
-        binary_repr.append("0")
+    Time Complexity
+    ---------------
+    O(1). We do fixed work.
 
-assert len(binary_repr) <= 32
-print(binary_repr)
+    Space Complexity
+    ----------------
+    O(1).
+    """
+    assert 0 < num < 1
+    binary_repr = ""
+    for bits in range(1, 33):
+        if num - 2 ** (-bits) >= 0:
+            binary_repr += "1"
+            num -= 2 ** (-bits)
+        else:
+            binary_repr += "0"
+    if num != 0:
+        raise ArithmeticError
+    return binary_repr
+
+
+num = 0.125
+print(num_to_binary(num))
+num = 0.1252
+print(num_to_binary(num))
