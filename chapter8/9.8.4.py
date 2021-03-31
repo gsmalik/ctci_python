@@ -1,18 +1,18 @@
 from copy import deepcopy as copy
 
-def create_subset(array):
+
+def create_subsets(array):
     if len(array) == 1:
-        return [(), (array[0],)]
-    else:
-        len_min_1_subset = create_subset(array[:-1])
-        return clone_array(len_min_1_subset, array[-1])
+        return [[], [array[0]]]
+    subsets = create_subsets(array[1:])
+    cloned_subsets = subsets[:]
 
-def clone_array(subset, element):
+    for subset in subsets:
+        cloned_subsets.append(subset + [array[0]])
 
-    cloned_array = copy(subset)
-    for tup in subset:
-        cloned_array.append(tup + (element,))
-    return cloned_array
+    return cloned_subsets
 
-num_elements = 5
-print(create_subset([x for x in range(num_elements)]))
+
+num_elements = 3
+subsets = create_subsets([x for x in range(num_elements)])
+print(subsets, len(subsets))
