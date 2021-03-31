@@ -1,65 +1,59 @@
 import numpy as np
-import copy
 
 
-class Node:
-    def __init__(self, r, c, obstacle):
-        self.r = r
-        self.c = c
-        self.paths = []
-        self.down = None
-        self.right = None
-        self.obstacle = obstacle
+# create a list to hold all feasible paths from source coordinates to destination
+# coordinates
+paths = []
+def find_paths(src_row, src_col, dst_row, dst_col, grid, current_path):
+    """
+    Function to find all feasible paths between source and destination on a 2D grid.
 
+    Parameters
+    ----------
+    src_row: int
+        Starting row index.
+    src_col: int
+        Starting column index.
+    dst_row: int
+        Target row index.
+    dst_col: int
+        Target column index.
+    grid: np.2darray
+        A 2D numpy array where 1 at a particular grid coordinate means that it is blocked.
+    current_path: list
+        Current path that lead to reaching the source coordinates.
 
-def find_path(r_start, c_start, r_goal, c_goal):
-    if grid[r_start][c_start].paths:
-        return grid[r_start][c_start]
+    Time Complexity
+    ---------------
+    O(2^(r+c)).
 
-    if r_start == r_goal and c_start == c_goal:
-        grid[r_goal][c_goal].paths = [[(r_goal, c_goal)]]
-        return grid[r_goal][c_goal]
+    Space Complexity
+    ----------------
+    O(r+c)
 
-    cannot_move = True
-    # If moving down is possible
-    if r_start + 1 < np.shape(grid)[0]:
-        if not grid[r_start + 1][c_start].obstacle:
-            cannot_move = False
-            # Add this current Node to start of each path for the node below
-            add_begining_node(
-                grid[r_start][c_start], find_path(r_start + 1, c_start, r_goal, c_goal)
-            )
+    """
+    # append current source coordinates to the current path
+    current_path.append((src_row, src_col))
 
-    if c_start + 1 < np.shape(grid)[1]:
-        # If moving right is possible
-        if not grid[r_start][c_start + 1].obstacle:
-            cannot_move = False
-            # Add this current Node to start of each path for the node below
-            add_begining_node(
-                grid[r_start][c_start], find_path(r_start, c_start + 1, r_goal, c_goal)
-            )
+    # return successfully if destination coordinates reached
+    if src_row == dst_row and src_col == dst_col:
+        paths.append(current_path)
+        return
 
-    # If cannot move
-    if cannot_move:
-        return None
-    else:
-        return grid[r_start][c_start]
+    # abandon current path and return if we have reached coordinates from which
+    # we cannot reach destination coordinates
+    if src_row > dst_row or src_col > dst_col or grid[src_row][src_col] == 1:
+        return
 
+    # move in the direction of destination coordinates by going right. remember
+    # that 'current_path' is a list and hence mutable and will be changed in place
+    # so pass a copy of 'current_path'
+    find_paths(src_row, src_col + 1, dst_row, dst_col, grid, current_path[:])
 
-def add_begining_node(node, neighbour_node):
-    if neighbour_node:
-        temp_paths = copy.deepcopy(neighbour_node.paths)
-        for each_path in temp_paths:
-            each_path.insert(0, (node.r, node.c))
-            node.paths.append(each_path)
-
-def update_grid(grid):
-    rows, columns = np.shape(grid)
-    array = np.ndarray((rows, columns), dtype=np.object)
-    for r in range(rows):
-        for c in range(columns):
-            array[r][c] = Node(r, c, bool(grid[r][c]))
-    return array
+    # move in the direction of destination coordinates by going down. remember
+    # that 'current_path' is a list and hence mutable and will be changed in place
+    # so pass a copy of 'current_path'
+    find_paths(src_row + 1, src_col, dst_row, dst_col, grid, current_path[:])
 
 
 r = 3
@@ -68,6 +62,7 @@ grid = np.random.randint(0, 2, (r, c))
 grid[0, 0] = 0
 grid[r - 1, c - 1] = 0
 print(grid)
-grid = update_grid(grid)
-find_path(0, 0, r - 1, c - 1)
-print(grid[0][0].paths)
+# grid = update_grid(grid)
+find_paths(0, 0, r - 1, c - 1, grid, [])
+print(paths)
+# print(grid[0][0].paths)
