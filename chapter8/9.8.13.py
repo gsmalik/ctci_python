@@ -1,42 +1,77 @@
 import numpy as np
 
 
-stacks = []
+stacks = {}
 
 
-def create_stack(boxes):
-    # sort according to height
-    boxes = boxes[np.argsort(-boxes[:, 0])]
+def find_max_height_sorted(boxes, index):
+    """
+    Function to calculate tallest possible stack
 
-    # remove boxes that do not satisfy width and length
-    index = 0
-    removed_indices = []
-    stack_boxes = boxes
-    print(stack_boxes)
-    while index < np.shape(stack_boxes)[0] - 1:
-        if (
-            stack_boxes[index][1] < stack_boxes[index + 1][1]
-            or stack_boxes[index][2] < stack_boxes[index + 1][2]
-        ):
-            removed_indices.append(stack_boxes[index + 1])
-            stack_boxes = np.delete(stack_boxes, index + 1, 0)
-        else:
-            index += 1
-    print(removed_indices)
-    if len(removed_indices) == np.shape(boxes)[0]:
-        stacks.append(1)
-        return
-    else:
-        stacks.append(np.shape(boxes)[0] - len(removed_indices))
-        # Create stack out of remaining boxes
-        if removed_indices:
-            create_stack(np.array(removed_indices))
+    Parameters
+    ----------
+    boxes: list
+        A list of boxes, sorted by height, where each box is represented as a tuple of (L,W,H)
+
+    index: int
+        Tallest stack possible using only boxes[index:].
+
+    Time Complexity
+    ---------------
+    O(N), where N is the number of boxes.
+
+    Space Complexity
+    ----------------
+    O(N), where N is the number of boxes.
+    """
+    # with the largest box (boxes[0]) at bottom, we can iterate through the rest
+    # of the boxes (boxes[i]), finding maximum height with them at bottom and
+    # then, if boxes[0] and boxes[i] are compatible, we can form a new stack with
+    # boxes[0] at bottom, under boxes[i]. we can update max_height if this stack
+    # is tallest.
+    max_height = boxes[index][2]
+    for i in range(index + 1, len(boxes)):
+        if compatible(boxes[index], boxes[i]):
+            # use cache if available
+            height = stacks[i] if i in stacks else find_max_height_sorted(boxes, i)
+            if height + boxes[index][2] > max_height:
+                max_height = height + boxes[index][2]
+
+    # if this index has not been cached, we cache it
+    if not index in stacks:
+        stacks[index] = max_height
+    return max_height
 
 
-num_boxes = 3
-box_details = np.random.randint(1, 20, (num_boxes, 3))
-create_stack(box_details)
-print("Box Specification\n", box_details)
-print("Possible Stacks:", stacks)
-print("Heighest Stacl:", max(stacks))
+def find_max_height(boxes):
+    """
+    Function to calculate tallest possible stack
 
+    Parameters
+    ----------
+    boxes: list
+        A list of boxes, where each box is represented as a tuple of (L,W,H)
+
+    Time Complexity
+    ---------------
+    O(Nlog(N)), where N is the number of boxes.
+
+    Space Complexity
+    ----------------
+    O(N), where N is the number of boxes.
+    """
+    boxes = sorted(boxes, key=lambda x: -x[2])
+    return find_max_height_sorted(boxes, 0)
+
+
+def compatible(box_under, box_over):
+    return (
+        box_under[0] > box_over[0]
+        and box_under[1] > box_over[1]
+        and box_under[2] > box_over[2]
+    )
+
+
+box_details = [(3, 4, 5), (1, 2, 4), (7, 7, 7), (7, 7, 1000), (10, 9, 15), (1, 2, 3)]
+
+print(find_max_height(box_details))
