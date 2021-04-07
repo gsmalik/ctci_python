@@ -1,50 +1,38 @@
 import numpy as np
 
-def place_queen(placements, row_num, N):
-    if row_num==N-1:
-        return_value = np.sum(placements[row_num,:] != -1)
-        if return_value !=0:
-            print(placements)
-        return return_value
-    
-    ways = 0
-    for column_num,square in enumerate(placements[row_num,:]):
-        # print("placing at square:", row_num, column_num, "with placements\n", placements)
-        if square==0:
-            ways += place_queen(update_constraints(np.ndarray.copy(placements), row_num, column_num), row_num+1, N)
-    return ways
+list_ways = []
 
-def update_constraints(placements, row_num, column_num):
-    # Set all squares in that row to -1
-    placements[row_num, :] = -1
 
-    # Set all squares in that col to -1
-    placements[:,column_num] = -1
+def place_queen(list_previous_queens, n):
+    # check if already placed queens are failing constraints
+    if failed_constraints(list_previous_queens):
+        return
+    # if all queens are place and we have not violated constraints, this means
+    # we have a valid placement. add it to list of valid placements.
+    if len(list_previous_queens) == n:
+        list_ways.append(list_previous_queens)
+        return
 
-    # Set all diagonals from that row, col to -1
-    index=0
-    while index+row_num < np.shape(placements)[0] and index+column_num < np.shape(placements)[0]:
-        placements[index+row_num][index+column_num] = -1
-        index+=1
+    # try each row for this queen
+    for row in range(n):
+        place_queen(list_previous_queens + [row], n)
 
-    index=0
-    while row_num-index >= 0 and column_num-index >=0:
-        placements[row_num-index][column_num-index] = -1
-        index+=1
 
-    index=0
-    while row_num-index >= 0 and index+column_num < np.shape(placements)[0]:
-        placements[row_num-index][index+column_num] = -1
-        index+=1
-    
-    index=0
-    while column_num-index >= 0 and index+row_num < np.shape(placements)[0]:
-        placements[index+row_num][column_num-index] = -1
-        index+=1
+def failed_constraints(list_placement):
+    # iterate through each column and check its constrains with the last column.
+    # we only need to check constraints with last column because all the other
+    # columns would be already satisfying their constraints with each other by
+    # design.
+    # for index, placement in enumerate(list_placement):
+    for index in range(len(list_placement) - 1):
+        if list_placement[-1] == list_placement[index] or (
+            len(list_placement) - 1 - index
+        ) == abs(list_placement[index] - list_placement[-1]):
+            return True
+    return False
 
-    placements[row_num][column_num]=1
-    return placements
 
-N=5
-test = np.zeros((N,N))
-print(place_queen(test, 0, N))
+N = 4
+test = np.zeros((N, N))
+place_queen([], N)
+print(list_ways)
