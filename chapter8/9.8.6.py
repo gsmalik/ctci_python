@@ -24,8 +24,7 @@ def move_disks(num_disks, origin, buffer, destination):
     # exit condition
     if num_disks <= 0:
         return
-    # move top 'num-1' disks from origin to buffer using desintation as buffer.
-    test.append(0)
+    # move top 'num-1' disks from origin to buffer using destination as buffer.
     move_disks(
         num_disks=num_disks - 1, origin=origin, buffer=destination, destination=buffer
     )
