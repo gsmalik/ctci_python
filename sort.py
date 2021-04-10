@@ -3,19 +3,36 @@ import numpy as np
 
 def bubble_sort(array):
     """
-    T = O(n).
+    Function to sort an array using bubble sort.
 
-    S = 1. Input space not considered. Only one temp variable needed
+    Parameters
+    ----------
+    array: list/np.1darray
+        Array that needs to be sorted
+
+    Returns
+    -------
+        Sorted array.
+
+    Time Complexity
+    ---------------
+    O(N^2), where N is the number of elements in the array.
+
+    Space Complexity
+    ----------------
+    O(1). Input space not considered.
     """
-    clean_pass = 0
-    while clean_pass == 0:
-        clean_pass = 1
+    # set a variable to track if latest iteration through array resulted in swaps
+    clean_pass = False
+    while not clean_pass:
+        # set clean_pass to True for this iteration
+        clean_pass = True
+        # iterate through array
         for i in range(len(array) - 1):
+            # swap if needed and update clean_pass
             if array[i] > array[i + 1]:
-                temp = array[i]
-                array[i] = array[i + 1]
-                array[i + 1] = temp
-                clean_pass = 0
+                array[i + 1], array[i] = array[i], array[i + 1]
+                clean_pass = False
     return array
 
 
@@ -66,9 +83,9 @@ def quick_sort(array):
     of pivot is in the middle of array. Hence, next sort is of size
     n/2, then n/4 and so on.
 
-    S = O(n) in worst case and O(logn) in best case. Remeber that
+    S = O(n) in worst case and O(logn) in best case. Remember that
     each recursive call adds 1 pointer to the stack. In worst case,
-    we would end up making n recursive calls, with each call using 
+    we would end up making n recursive calls, with each call using
     up O(1) space, which gets destroyed after that call is finished.
     Hence, at the last recursive call, we would have n calls on the stack
     and 1 temp variable to swap. Thus, in worst case, we would consume
