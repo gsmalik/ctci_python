@@ -77,30 +77,42 @@ def counting_sort(array, position, k):
 
 def quick_sort(array):
     """
-    T = O(nlogn) best and O(n^2) as worst. Worst happens when actual
-    position of pivot is at starting/ending of array. Hence next sort
-    is of size n-1, then n-2 etc. Best happens when actual position
-    of pivot is in the middle of array. Hence, next sort is of size
-    n/2, then n/4 and so on.
+    T = O(NlogN) best and O(N^2) as worst, where N is the number of elements in the
+    array. Worst happens when actual position of pivot is at starting/ending of array.
+    Hence next sort is of size N-1, then N-2 etc. Best happens when actual position of
+    pivot is in the middle of array. Hence, next sort is of size N/2, then N/4 and so
+    on.
 
-    S = O(n) in worst case and O(logn) in best case. Remember that
-    each recursive call adds 1 pointer to the stack. In worst case,
-    we would end up making n recursive calls, with each call using
-    up O(1) space, which gets destroyed after that call is finished.
-    Hence, at the last recursive call, we would have n calls on the stack
-    and 1 temp variable to swap. Thus, in worst case, we would consume
-    O(n) space. In best case, we would have O(logn) calls, thus consuming
-    O(logn) space.
+    S = O(N) in worst case and O(logN) in best case, where N is the number of elements
+    in the array. Remember that each recursive call adds 1 pointer to the stack. In
+    worst case, we would end up making n recursive calls, with each call using up O(1)
+    space, which gets destroyed after that call is finished. Hence, at the last
+    recursive call, we would have n calls on the stack and 1 temp variable to swap.
+    Thus, in worst case, we would consume O(N) space. In best case, we would have
+    O(logN) calls, thus consuming O(logN) space.
     """
 
-    def identifySplit_movePivot(array, pivot_index):
+    def sort_update_pivot_index(array, pivot_index):
+        """
+        A function to sort the array and move the pivot element such that elements less
+        than pivot element are left of the new pivot index and elements greater than the
+        pivot element are right of the new pivot index.
+
+        Note that the array is not necessarily sorted. Just that the pivot is moved to an index
+        such that elements smaller to the left of it and bigger to the right of it.
+        """
+        # i will become the new pivot element
         i = -1
-        j = 0
-        while j < len(array):
+        # j = 0
+        # iterate through array
+        for j in range(len(array)):
+            # while j < len(array):
+            # if current element is less than our original pivot index, then it should
+            # stay to the left of the final pivot index (i). Note that the pivot element
+            # is still going to be the same, just that we are changing the index.
             if array[j] < array[pivot_index]:
                 i += 1
                 array[j], array[i] = array[i], array[j]
-            j += 1
         array[pivot_index], array[i + 1] = array[i + 1], array[pivot_index]
 
         return array, i + 1
@@ -108,16 +120,21 @@ def quick_sort(array):
     if len(array) < 2:
         return array
 
-    # find split position and move pivot element to its sorted position
-    array, pivot_index = identifySplit_movePivot(array, len(array) - 1)
-    # quick sort on 0:split-1 (inclusive)
+    # sort array around pivot and update pivot index. now we have an array where
+    # elements less than array[pivot_index] are to the left of pivot_index and
+    # elements greater than array[pivot_index] are to the right of pivot_index
+    array, pivot_index = sort_update_pivot_index(array, len(array) - 1)
+
+    # quick sort on left side
     array[0:pivot_index] = quick_sort(array[0:pivot_index])
-    # quick sort on split+1:len(array) (inclusive)
-    array[pivot_index + 1 : len(array)] = quick_sort(
-        array[pivot_index + 1 : len(array)]
-    )
+    # quick sort on right
+    array[pivot_index + 1 :] = quick_sort(array[pivot_index + 1 :])
 
     return array
+
+
+array = [5, 4, 3, 2, 1, 1000]
+print(quick_sort(array))
 
 
 def merge_sort(array):
