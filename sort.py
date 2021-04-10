@@ -268,14 +268,25 @@ def heap_sort(array):
 
 def insertion_sort(array):
     """
-    T = O(n^2). If we have a descending array, then element at index 1
-    will be swapped with 0. Then index at 2 will swap with 1 and then 0.
-    Index 3 with 2,1 and 0 and so on. So, worst case, it can take n^2
-    swaps.
+    Time Complexity
+    ---------------
+    O(N^2), where N is the number of elements in the array. If we have a descending
+    array, then element at index 1 will be swapped with 0. Then index at 2 will swap
+    with 1 and then 0. Index 3 with 2,1 and 0 and so on. So, worst case, it can take
+    N^2 swaps.
 
-    S = O(1). Only a temp variable used for swaps.
+    Space Complexity
+    ----------------
+    O(1). Only a temp variable used for swaps.
     """
+    # iterate through array, for each index we make sure that everything up to
+    # index-1 is sorted.
     for index in range(len(array) - 1):
+        # if index is not sorted, we start bubbling element at index down until
+        # it is at the correct position. note that since all elements up till
+        # index-1 are sorted, we are just inserting the element at 'index' in its
+        # correct position. the relative position between the elements up till
+        # 'index-1' is unchanged.
         if array[index] > array[index + 1]:
             # move index + 1 to proper index
             pin_index = index + 1
