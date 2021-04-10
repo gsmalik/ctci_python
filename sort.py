@@ -130,25 +130,25 @@ def quick_sort(array):
 
     return array
 
-
-array = [5, 4, 3, 2, 1, 1000]
-print(quick_sort(array))
-
-
 def merge_sort(array):
     """
-    T = O(nlogn). At every level, it takes n total steps to sort l arrays of size
-    n/l. There are a total of logn levels
+    Time Complexity
+    ---------------
+    O(NlogN), where N is the number of elements in the array. At every level, it takes
+    n total steps to sort l arrays of size n/l. There are a total of logn levels.
 
-    S = O(n). At every level, you need to create a new array to merge the 2
-    sub-arrays. Once merged, the sub-arrays are destroyed. When merging 2 sub-arrays
-    at level l, you will need a new temp array of size n/2^l. At level 0, this means
-    you will need a temp array of size n. Also, dont forget to think about your stack
-    depth, although you will see that it is smaller than n. In merge sort, you will have
-    a max recursive stack depth of O(logn) at level logn. But at this stage, your temp array
-    size will be 0 since this is last level. At level log(n)-1, your temp array size will be
-    2 and recursive depth of log(n)-1. Thus, at level 0, your temp array will be of size n
-    and recursive depth of 0. Thus, overall space complexity is O(n).
+    Space Complexity
+    ----------------
+    O(N), where N is the number of elements in the array. At every level, you need to
+    create a new array to merge the 2 sub-arrays. Once merged, the sub-arrays are
+    destroyed. When merging 2 sub-arrays at level l, you will need a new temp array of
+    size N/2^l. At level 0, this means you will need a temp array of size N. Also, dont
+    forget to think about your stack depth, although you will see that it is smaller
+    than n. In merge sort, you will have a max recursive stack depth of O(logN) at
+    level logN. But at this stage, your temp array size will be 0 since this is last
+    level. At level log(N)-1, your temp array size will be 2 and recursive depth of
+    log(N)-1. Thus, at level 0, your temp array will be of size N and recursive depth
+    of 0. Thus, overall space complexity is O(N).
     """
 
     # Return as-is if len is 1
