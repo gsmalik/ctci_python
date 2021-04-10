@@ -134,23 +134,25 @@ def quick_sort(array):
 
     return array
 
+
 def merge_sort(array):
     """
     Time Complexity
     ---------------
     O(NlogN), where N is the number of elements in the array. At every level, it takes
-    n total steps to sort l arrays of size n/l. There are a total of logn levels.
+    n total steps to sort l arrays of size n/l. There are a total of logN levels.
 
     Space Complexity
     ----------------
-    O(N), where N is the number of elements in the array. At every level, you need to
-    create a new array to merge the 2 sub-arrays. Once merged, the sub-arrays are
-    destroyed. When merging 2 sub-arrays at level l, you will need a new temp array of
-    size N/2^l. At level 0, this means you will need a temp array of size N. Also, dont
+    O(N), where N is the number of elements in the array. At every level, you will have
+    2 new sorted sub-arrays that can be merged using original array. Once merged, the
+    sub-arrays are destroyed. When merging 2 sub-arrays at level l, you will have 2
+    sub arrays, with each being of size N/2^(l+1), hence consuming an extra space of
+    size N/2^l. At level 0, this means you will have 2 sub arrays of size N. Also, dont
     forget to think about your stack depth, although you will see that it is smaller
     than n. In merge sort, you will have a max recursive stack depth of O(logN) at
-    level logN. But at this stage, your temp array size will be 0 since this is last
-    level. At level log(N)-1, your temp array size will be 2 and recursive depth of
+    level logN. But at this stage, your sub array sizes will be 0 since this is last
+    level. At level log(N)-1, your sub array sizes will be 2 and recursive depth of
     log(N)-1. Thus, at level 0, your temp array will be of size N and recursive depth
     of 0. Thus, overall space complexity is O(N).
     """
@@ -164,8 +166,6 @@ def merge_sort(array):
     left_array = merge_sort(array[:middle])
     right_array = merge_sort(array[middle:])
 
-    # Create an empty list to merge left, right arrays
-    merged_array = []
     l_index = r_index = 0
 
     # Merge element by element until one array all merged in
@@ -173,22 +173,18 @@ def merge_sort(array):
         left_element = left_array[l_index]
         right_element = right_array[r_index]
         if left_element < right_element:
-            merged_array.append(left_element)
+            array[l_index + r_index] = left_element
             l_index += 1
         else:
-            merged_array.append(right_element)
+            array[l_index + r_index] = right_element
             r_index += 1
 
-    # Merge elements of remaining array
-    if l_index < len(left_array):
-        for element in left_array[l_index:]:
-            merged_array.append(element)
+    # merge rest of elements
+    array[l_index + r_index :] = (
+        left_array[l_index:] if l_index < len(left_array) else right_array[r_index:]
+    )
 
-    if r_index < len(right_array):
-        for element in right_array[r_index:]:
-            merged_array.append(element)
-
-    return np.array(merged_array)
+    return array
 
 
 def radix_sort(array):
