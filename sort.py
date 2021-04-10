@@ -103,10 +103,8 @@ def quick_sort(array):
         """
         # i will become the new pivot element
         i = -1
-        # j = 0
         # iterate through array
         for j in range(len(array)):
-            # while j < len(array):
             # if current element is less than our original pivot index, then it should
             # stay to the left of the final pivot index (i). Note that the pivot element
             # is still going to be the same, just that we are changing the index.
