@@ -77,13 +77,17 @@ def counting_sort(array, position, k):
 
 def quick_sort(array):
     """
-    T = O(NlogN) best and O(N^2) as worst, where N is the number of elements in the
+    Time Complexity
+    ---------------
+    O(NlogN) best and O(N^2) as worst, where N is the number of elements in the
     array. Worst happens when actual position of pivot is at starting/ending of array.
     Hence next sort is of size N-1, then N-2 etc. Best happens when actual position of
     pivot is in the middle of array. Hence, next sort is of size N/2, then N/4 and so
     on.
 
-    S = O(N) in worst case and O(logN) in best case, where N is the number of elements
+    Space Complexity
+    ----------------
+    O(N) in worst case and O(logN) in best case, where N is the number of elements
     in the array. Remember that each recursive call adds 1 pointer to the stack. In
     worst case, we would end up making n recursive calls, with each call using up O(1)
     space, which gets destroyed after that call is finished. Hence, at the last
