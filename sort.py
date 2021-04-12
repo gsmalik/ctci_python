@@ -299,41 +299,56 @@ def insertion_sort(array):
     return array
 
 
-def bucket_sort(array, num_buckets, low, high):
+def bucket_sort(array, num_buckets):
     """
-    T = O(n) in best. O(k*sorting_elements(n/k)) in average case.
-    O(sorting algorithm) in worst case. It takes n steps to assign each
-    element to bucket. In average case, since elements are uniformly
-    distributed, each bucket should have n/k elements. Hence it should
-    take O(k*sorting_elements(n/k)) time on average. In best case,
-    each bucket will only have one element, thus no sorting required,
-    leading to O(n) best case time.
+    Function to sort a given array using bucket sort.
 
-    S = At one time, you will only be sorting one bucket and then just
-    storing the final sorted bucket. Sorted buckets total will have a
-    total of n elements obviosuly so we need O(n) space to store sorted
-    buckets. Coming back to sorting a bucket, once a bucket is sorted
-    we can destroy the intermediate space. So, in worst case, all elements
-    can belong to same bucket. Thus space complexity will be
-    O(n)+space_complexity(sorting_algorithm(n)). In average case, each bucket
-    will have n/k elements and we will only sort one bucket at a time. Thus
-    space complexity will be O(n)+space_complexity(sorting_algorithm(n/k)). In
-    best case, there will be 1 element in each case, thus requiring no sorting
-    and consuming only O(n) space.
+    Parameters
+    ----------
+    array: list/np.1darray
+        Array that needs to be sorted.
+
+    num_buckets: int
+        Num of buckets to use.
+
+    Time Complexity
+    ---------------
+    O(N) in best. O( max(N,K*t_sorting_algorithm(N/K) )) in average case.
+    O( t_sorting algorithm(N) ) in worst case. N is the number of elements in the array
+    and K is the number of buckets. It takes N steps to assign each element to bucket.
+    In average case, since elements are uniformly distributed, each bucket should have
+    N/K elements. So, you will sort each bucket containing N/K elements. Hence it
+    should take O(max(N, K*t_sorting_algorithm(N/K)) time on average. In best case,
+    each bucket will only have one element, thus no sorting required, leading to O(N) best
+    case time.
+
+    Space Complexity
+    ----------------
+    At one time, you will only be sorting one bucket and then just storing the final
+    sorted bucket. Sorted buckets total will have a total of N elements obviously so we
+    need O(N) space to store sorted buckets. Coming back to sorting a bucket, once a
+    bucket is sorted, we can destroy the intermediate space. So, in worst case, all
+    elements can belong to same bucket. Thus space complexity will be
+    O( max(N, s_sorting_algorithm(N)) ). In average case, each bucket will have N/K
+    elements and we will only sort one bucket at a time. Thus space complexity will be
+    O( max(M, s_sorting_algorithm(N/K)) ). In best case, there will be 1 element in
+    each case, thus requiring no sorting and consuming only O(n) space.
     """
+    low = min(array)
+    high = max(array)
+
+    assert high > low
+
     # Create number of buckets
-    bucket = []
-    for _ in range(num_buckets):
-        bucket.append([])
+    bucket = [[] for _ in range(num_buckets)]
 
-    # Nomalize value and assign it to a bucket
+    # Normalize value and assign it to a bucket
     for value in array:
-        assert ((value - low) / (high - low)) * num_buckets >= 0
-        bucket[int(((value - low) / (high - low)) * num_buckets)].append(value)
+        bucket_index = int(((value - low) / (high - low))) * (num_buckets - 1)
+        bucket[bucket_index].append(value)
 
-    # Sort each bucket individually using merge sort
-    for index, value in enumerate(bucket):
-        bucket[index] = merge_sort(value)
+    # Sort each non empty bucket individually using merge sort
+    bucket = [merge_sort(value) for value in bucket if value]
 
     # Return sorted buckets
-    return np.array([item for sublist in bucket for item in sublist])
+    return [item for sublist in bucket for item in sublist]
