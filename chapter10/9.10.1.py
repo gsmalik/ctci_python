@@ -1,12 +1,42 @@
 import numpy as np
 
+
 def merge_arrays(array_a, len_a, array_b):
-    len_merged_array = len_a + len(array_b)
-    index_array_merged = len_merged_array - 1
+    """
+    Function to merge two sorted arrays
+
+    Parameters
+    ----------
+    array_a: np.1darray
+        Array that has a large enough buffer at end to absorb other array for merging.
+    len_a: int
+        Length of 'array_a', without the buffer.
+    array_b: np.1darray
+        The other smaller array
+
+    Returns
+    -------
+    Merged, sorted array
+
+    Time Complexity
+    ---------------
+    O(B), where B is the number of elements in 'array_b'.
+
+    Space Complexity
+    ----------------
+    O(1).
+    """
+    # the important aspect is to start merging from the back. create an index
+    # tracker for that.
+    index_array_merged = len_a + len(array_b) - 1
+    # references to keep a track of which elements have been merged, starting
+    # back
     index_array_a = len_a - 1
     index_array_b = len(array_b) - 1
 
+    # keep merging till all elements of 'array_b' have been merged in
     while index_array_b >= 0:
+        # since merging in reverse, bigger element will be merged first
         if index_array_a >= 0 and array_a[index_array_a] > array_b[index_array_b]:
             array_a[index_array_merged] = array_a[index_array_a]
             index_array_a -= 1
