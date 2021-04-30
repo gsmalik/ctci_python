@@ -45,7 +45,7 @@ def heap_sort(file):
             node_index = right_child_index
 
         # Do the swap. Heapify the current element. Note the current element is the
-        # orgiginal element. It has just been moved and we are calling heapify on its
+        # original element. It has just been moved and we are calling heapify on its
         # latest position
         if node_index != orig_index:
             file = swap_strings(file, orig_index, node_index)
