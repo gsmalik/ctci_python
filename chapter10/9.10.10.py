@@ -1,4 +1,6 @@
 class Node:
+    """Node data structure to construct BST"""
+
     def __init__(self, value, rank):
         self.value = value
         self.rank = rank
@@ -9,6 +11,10 @@ class Node:
 
 
 class Track:
+    """
+    Class to keep a track of each incoming number.
+    """
+
     def __init__(self):
         self.root = None
         self.num_elem = 0
@@ -21,6 +27,22 @@ class Track:
             self.root = Node(value, 0)
 
     def insert_bst(self, value):
+        """
+        Function to insert an element into the BST.
+
+        Parameters
+        ----------
+        value: FP32
+            The value to insert.
+
+        Time Complexity
+        ---------------
+        O(logN), where N is the number of elements in the BST.
+
+        Space Complexity
+        ---------------
+        O(logN), where N is the number of elements in the BST.
+        """
         node = self.root
         while True:
             # go left
@@ -44,17 +66,31 @@ class Track:
                     break
 
     def get_rank(self, value):
+        """
+        Function to get a rank of value.
+
+        Parameters
+        ----------
+        value: FP32
+            The value to get a rank for.
+
+        Time Complexity
+        ---------------
+        O(logN), where N is the number of elements in the BST.
+
+        Space Complexity
+        ---------------
+        O(logN), where N is the number of elements in the BST.
+        """
         node = self.root
         rank = 0
         while node.value != value:
-            rank = rank + node.left_len
-
-            if value < node.value:
-                rank -= node.right_len
-                node = node.left
-            else:
-                rank += 1
+            if value >= node.value:
+                rank = rank + node.left_len
+                rank = rank + 1
                 node = node.right
+            else:
+                node = node.left
         return rank + node.left_len
 
 
@@ -68,5 +104,8 @@ track.track(9)
 track.track(7)
 track.track(13)
 track.track(3)
-
-print(track.get_rank(9))
+track.track(6)
+print(track.get_rank(1))
+print(track.get_rank(3))
+print(track.get_rank(6))
+print(track.get_rank(13))
