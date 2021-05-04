@@ -230,50 +230,115 @@ def heap_sort(array):
     """
 
     def create_max_heap(array):
+        """
+        Function to convert array into a max heap.
+
+        Parameters
+        ----------
+        array: list/np.1darray
+            Array that needs to be converted to a max heap.
+
+        Time Complexity
+        ---------------
+        O(N), as explained above.
+
+        Space Complexity
+        ----------------
+        O(1).
+        """
         for i in range(len(array) // 2, -1, -1):
             array = max_heapify(i, array)
         return array
 
     def max_heapify(parent_index, array):
+        """
+        Function to make sure a particular element of the array satisfies the property
+        of a max heap.
+
+        Parameters
+        ----------
+        parent_index: int
+            Index of element in the array that needs to be checked for max heap
+            compliance.
+        array: list/np.1darray
+            Array to which the element of intereset belongs.
+
+        Time Complexity
+        ---------------
+        O(logN), where N is the number of elements in the array. In worst case, you
+        might have the smallest number at the top of the max heap, which will need to
+        bubbled down, which can take logN steps. Remember that in the context of heap
+        sort, the length of array keeps decreasing by 1 every time you do a swap. But
+        whatever the current length is (denoted as N in this context), it can take at
+        worst logN steps.
+
+        Space Complexity
+        ----------------
+        O(1).
+        """
+        # return without doing anything if array is empty
         if len(array) == 0:
             return array
-        
-        child1_index = 2 * parent_index + 1
-        child2_index = 2 * parent_index + 2
+        while True:
+            # calculate indices of potential children
+            child1_index = 2 * parent_index + 1
+            child2_index = 2 * parent_index + 2
 
-        child1_exists = child1_index <= len(array) - 1
-        child2_exists = child2_index <= len(array) - 1
+            # check if children exist
+            child1_exists = child1_index <= len(array) - 1
+            child2_exists = child2_index <= len(array) - 1
 
-        if not child1_exists and not child2_exists:
-            return array
+            # determine index with which parent index will be swapped.
+            new_index = parent_index
+            if child1_exists:
+                new_index = (
+                    child1_index
+                    if array[new_index] < array[child1_index]
+                    else new_index
+                )
 
-        new_index = parent_index
-        if child1_exists:
-            new_index = (
-                child1_index if array[new_index] < array[child1_index] else new_index
+            if child2_exists:
+                new_index = (
+                    child2_index
+                    if array[new_index] < array[child2_index]
+                    else new_index
+                )
+
+            # do the swap
+            array[parent_index], array[new_index] = (
+                array[new_index],
+                array[parent_index],
             )
 
-        if child2_exists:
-            new_index = (
-                child2_index if array[new_index] < array[child2_index] else new_index
-            )
+            # if no swap happended, as captured by the condition, we can exit
+            if new_index == parent_index:
+                break
+            # if swap happened and parent was bubbled down, then we need to make
+            # sure that max heap is compliance is met between bubbled down parent
+            # and new children. hence, continue with looping.
+            else:
+                parent_index = new_index
 
-        array[parent_index], array[new_index] = array[new_index], array[parent_index]
-
-        if new_index != parent_index:
-            return max_heapify(new_index, array)
         return array
 
+    # create a max heap out of array
     array = create_max_heap(array)
 
+    # swap first element (largest) with last (smallest) and bubble down smallest
+    # from top to its correct position. do not take the swapped largest elements,
+    # into account when max_heapifying since they are already at their correct
+    # postion. The first time, you have the largest element at the top which you
+    # send to last, second time you have the second largest element at top which
+    # you send to second last and so on. hence they are already at their correct
+    # positions and don't need to be taken into account when max heapifying.
     for index in range(len(array) - 1, 0, -1):
         # swap root and last element
         array[0], array[index] = array[index], array[0]
 
-        array[: index - 1] = max_heapify(0, array[: index - 1])
+        # max heapify rest of array
+        array[:index] = max_heapify(0, array[:index])
 
     return array
-
 
 
 def insertion_sort(array):
