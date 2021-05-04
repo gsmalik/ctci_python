@@ -207,63 +207,73 @@ def radix_sort(array):
 
 def heap_sort(array):
     """
-    T = O(nlogn) = O(log(n!)). Creating the first heap of entire array takes O(n)
-    time (weird derivation. See https://www.youtube.com/watch?v=k72DtCnY4MU). Then
-    each time you have to heapify the top element (after swap), that will take log(n-1)
-    for first, then log(n-2) for second and so on. Adding all this, it becomes O(log(n!))
-    which can be written as O(nlogn) loosely. Not super sure why everyone says time
-    complexity is nlogn whereas it should be log(n!).
+    Time Complexity
+    ---------------
+    O(NlogN). Creating the first heap of entire array takes O(N) time (see your notes
+    about heaps about why N). Then, you will basically pop the first element as your
+    minimum and put the last element in its place. Then pop that and put the next last
+    element in its place and so on.
 
+    Notice that when you are popping and putting the last element at top, this element
+    might need to bubble down. Worst case it bubbles down to last level. Remember that
+    the last N/2 elements of the array will all lie in the same level: log(N). Hence,
+    for the first N/2 such moves, each of these 'last' elements might move to the last
+    level, which will still be log(N). So, it will take N/2*log(N) time to move down
+    the last N/2 elements. Then the next N/4 elements (level above) will take log(N)-1
+    time, then N/8 elements will take log(N)-2 time and so on. Hence overall time can
+    become N/2*log(N) + N/4*(log(N) - 1) + N/8*(log(N) - 2) + ...This reduces roughly
+    to O(NlogN). The derivation is a bit complex but you can see it in your notes.
+
+    Space Complexity
+    ----------------
     S = O(1). Just using a temp variable to do swaps. Everything is in-place.
     """
 
-    def heapify_complete_array(array):
-        # Hepaify upper half of elements of array. Upper half enough because
-        # we will swap with children (2*index+1, 2*index+2) inside this, which
-        # lie in lower half.
-        for index in range(len(array) // 2, -1, -1):
-            array = heapify(array, index)
+    def create_max_heap(array):
+        for i in range(len(array) // 2, -1, -1):
+            array = max_heapify(i, array)
         return array
 
-    def heapify(array, node_index):
+    def max_heapify(parent_index, array):
+        if len(array) == 0:
+            return array
+        
+        child1_index = 2 * parent_index + 1
+        child2_index = 2 * parent_index + 2
 
-        orig_index = node_index
-        left_child_index = 2 * node_index + 1
-        right_child_index = 2 * node_index + 2
+        child1_exists = child1_index <= len(array) - 1
+        child2_exists = child2_index <= len(array) - 1
 
-        # Decide which node to swap with. Will swap with bigger child, if exists.
-        if (
-            left_child_index < len(array)
-            and array[left_child_index] > array[node_index]
-        ):
-            node_index = left_child_index
+        if not child1_exists and not child2_exists:
+            return array
 
-        if (
-            right_child_index < len(array)
-            and array[right_child_index] > array[node_index]
-        ):
-            node_index = right_child_index
+        new_index = parent_index
+        if child1_exists:
+            new_index = (
+                child1_index if array[new_index] < array[child1_index] else new_index
+            )
 
-        # Do the swap. Heapify the current element. Note the current element is the
-        # orgiginal element. It has just been moved and we are calling heapify on its
-        # latest position
-        if node_index != orig_index:
-            array[orig_index], array[node_index] = array[node_index], array[orig_index]
-            array = heapify(array, node_index)
+        if child2_exists:
+            new_index = (
+                child2_index if array[new_index] < array[child2_index] else new_index
+            )
+
+        array[parent_index], array[new_index] = array[new_index], array[parent_index]
+
+        if new_index != parent_index:
+            return max_heapify(new_index, array)
         return array
 
-    len_array = len(array)
+    array = create_max_heap(array)
 
-    # Heapigy entire array once
-    array = heapify_complete_array(array)
-    for index in range(len_array - 1, -1, -1):
-        # Swap first (max) and last element (of array size index+1).
+    for index in range(len(array) - 1, 0, -1):
+        # swap root and last element
         array[0], array[index] = array[index], array[0]
 
-        # Heapify remaining array to find next max element
-        array[:index] = heapify(array[:index], 0)
+        array[: index - 1] = max_heapify(0, array[: index - 1])
 
     return array
+
 
 
 def insertion_sort(array):
