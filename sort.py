@@ -36,44 +36,87 @@ def bubble_sort(array):
     return array
 
 
-def counting_sort(array, position, k):
+def counting_sort(array, radix_position):
     """
-    T = O(n+k).
+    Function to sort an array using counting sort.
 
-    S = O(n+k). Input space not considered. One freq. array of k size and
-    one sorted array of n size
+    Parameters
+    ----------
+    array: list/np.1darray
+        Array that needs to be sorted.
+    radix_position: int
+        Radix position that needs to be used for sorting. For example, in an array of
+        [123,456,121,004], a radix_position of 1 means [2,5,2,0] would be used to sort
+        the array.
+
+    Time Complexity
+    ---------------
+    O(N). You go through the array linearly thrice. Once for creating frequency array,
+    second for accumulating frequency and finally for sorting.
+
+    Space Complexity
+    ----------------
+    O(N). The frequency array is constant space and you use a new array of same size as
+    original array for creating the sorted array.
     """
-    # Assert base 10 or greater
-    # Create freq. count array
-    freq = np.zeros((k), dtype=np.int32)
+    # Create freq. count array of len 11
+    # 11 because 10 (0-9) + 1 (if length of number is less than radix position)
+    freq = np.zeros((11), dtype=np.int32)
 
     # Create freq of each based element
     for element in array:
+        # create string representation of array and reverse it because originally
+        # 0th radix bit lies at end etc
         element_str = str(element)[::-1]
-        if len(element_str) > position:
-            freq[int(element_str[position])] += 1
+        # if the length of integer is smaller than the radix position, it would be
+        # the smallest and needs to come first. hence we keep it at 0. hence,
+        # frequency of '0' will be at index 1, frequency of '1' will be at index
+        # 2 and so on.
+        if len(element_str) > radix_position:
+            freq[int(element_str[radix_position])+1] += 1
         else:
             freq[0] += 1
 
-    # Create cumulative freq of each based element
+    # create cumulative freq of each based element
     for index, _ in enumerate(freq[:-1]):
         freq[index + 1] += freq[index]
 
-    # Create array to write sorted values to
+    # create array to write sorted values to
     sorted_array = np.zeros(len(array), dtype=np.int64)
 
-    # Assign each element to it place according to its cumulative freq.
+    # assign each element to it place according to its cumulative freq.
+    # you go in reverse because if using radix sort, then positions smaller than
+    # radix_position have already been sorted so the larger of the numbers on the
+    # already sorted radix positions need to be assigned the higher cumulative
+    # frequency index.
     for element in reversed(array):
-        # subtract 1 because indexing starts from zero.
         element_str = str(element)[::-1]
-        if len(element_str) > position:
-            index = int(element_str[position])
+        if len(element_str) > radix_position:
+            index = int(element_str[radix_position]) + 1
         else:
             index = 0
+        # subtract 1 because indexing starts from zero.
         sorted_array[freq[index] - 1] = element
         freq[index] -= 1
     return sorted_array
 
+def radix_sort(array):
+    """
+    T = O(Dn), where D is the maximum number of digits in base 10 represetantion.
+    For each digit place, it takes O(n+10)=O(n) steps to sort. We sort for D digit
+    places, thus equalling O(Dn).
+
+    S = O(n). For each digit place, we use O(N+10) = O(n) space. The returned array
+    is itself used as input for the next digit place sort. Hence, using O(n) space.
+    """
+    base = 1
+    index = 0
+    while sum(x // base == 0 for x in array) != len(array):
+        array = counting_sort(array, index)
+        print(array)
+        base *= 10
+        index += 1
+    return array
 
 def quick_sort(array):
     """
@@ -184,24 +227,6 @@ def merge_sort(array):
         left_array[l_index:] if l_index < len(left_array) else right_array[r_index:]
     )
 
-    return array
-
-
-def radix_sort(array):
-    """
-    T = O(Dn), where D is the maximum number of digits in base 10 represetantion.
-    For each digit place, it takes O(n+10)=O(n) steps to sort. We sort for D digit
-    places, thus equalling O(Dn).
-
-    S = O(n). For each digit place, we use O(N+10) = O(n) space. The returned array
-    is itself used as input for the next digit place sort. Hence, using O(n) space.
-    """
-    base = 1
-    index = 0
-    while sum(x // base == 0 for x in array) != len(array):
-        array = counting_sort(array, index, 10)
-        base *= 10
-        index += 1
     return array
 
 
