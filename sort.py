@@ -73,7 +73,7 @@ def counting_sort(array, radix_position):
         # frequency of '0' will be at index 1, frequency of '1' will be at index
         # 2 and so on.
         if len(element_str) > radix_position:
-            freq[int(element_str[radix_position])+1] += 1
+            freq[int(element_str[radix_position]) + 1] += 1
         else:
             freq[0] += 1
 
@@ -100,14 +100,26 @@ def counting_sort(array, radix_position):
         freq[index] -= 1
     return sorted_array
 
+
 def radix_sort(array):
     """
-    T = O(Dn), where D is the maximum number of digits in base 10 represetantion.
-    For each digit place, it takes O(n+10)=O(n) steps to sort. We sort for D digit
-    places, thus equalling O(Dn).
+    Function to sort given array using radix sort.
 
-    S = O(n). For each digit place, we use O(N+10) = O(n) space. The returned array
-    is itself used as input for the next digit place sort. Hence, using O(n) space.
+    Parameters
+    ----------
+    array: list/np.1darray
+        Array that needs to be sorted. All numbers must be positive.
+
+    Time Complexity
+    ---------------
+    O(DN), where N is number of elements in the array and D is the maximum number of
+    digits in base 10 represetantion. For each digit place, it takes O(N) steps to
+    sort. We sort for D digit places, thus equalling O(DN).
+
+    Space Complexity
+    ----------------
+    O(N). For each digit place, we use O(N) space. The returned array is itself used as
+    input for the next digit place sort and then destroyed. Hence, using O(N) space.
     """
     base = 1
     index = 0
@@ -117,6 +129,7 @@ def radix_sort(array):
         base *= 10
         index += 1
     return array
+
 
 def quick_sort(array):
     """
