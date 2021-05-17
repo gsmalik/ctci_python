@@ -161,7 +161,8 @@ def quick_sort(array):
         Note that the array is not necessarily sorted. Just that the pivot is moved to an index
         such that elements smaller to the left of it and bigger to the right of it.
         """
-        # i will become the new pivot element
+        # i will become the new pivot element. all elements after i (>) are
+        # bigger than pivot and rest (<=) are smaller than pivot.
         i = -1
         # iterate through array
         for j in range(len(array)):
