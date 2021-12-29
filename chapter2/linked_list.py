@@ -156,21 +156,40 @@ def reverse_linked_list(head):
     ----------------
     O(1)
     """
-    # Reverse connect linked list
-    current_pointer = head
-    while head.next:
-        head.next.previous = head
-        head = head.next
-    to_return_node = head
+    
+    # create a function to reverse 3 nodes
+    def _reverse(previous, current):
+        """
+        A function to connect current to previous and return "current" node's
+        next node.
+        Args:
+            previous (Node): A node that has already had its "next" reversed.
+            current (Node): The node whose "next" needs to be reversed.
 
-    # Set forward connections equal to reverse connectsions and cut off reverse
-    # connections
-    while head:
-        head.next = head.previous
-        head.previous = None
-        head = head.next
-
-    return to_return_node
+        Returns:
+            [Node]: The next node of current
+        """
+        # store the original next of `current`. do this before reversing 
+        # `current``
+        next = current.next
+        
+        # reverse the 
+        current.next = previous
+        
+        return current, next
+    
+    previous = None
+    current = head
+    while True:
+        if previous is None:
+            print(f"current is {current.value}")
+        else:
+            print(f"current is {current.value} and previous is {previous.value}")
+        previous, current = _reverse(previous=previous, current=current)
+        if current is None:
+            break
+    
+    return previous
 
 
 def traverse_linked_list_steps(head, steps):
